@@ -36,7 +36,7 @@ const SearchBar = () => {
 
             <button
               type="submit"
-              className="p-2 text-white bg-red-500 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="p-2 text-white bg-gray-800 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500"
             >
               <HiMagnifyingGlass className="h-5 w-5" />
             </button>

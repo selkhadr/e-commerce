@@ -2,7 +2,7 @@ import { FaFacebook, FaInstagram, FaXTwitter } from "react-icons/fa6";
 
 const Topbar = () => {
   return (
-    <div className="bg-red-600 text-white text-sm">
+    <div className="bg-gray-800 text-white text-sm">
       <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center px-4 py-2 gap-2 sm:gap-0">
         <div className="hidden sm:flex gap-4 items-center">
           <a href="#" className="hover:text-gray-200">
