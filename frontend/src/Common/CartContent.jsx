@@ -6,7 +6,7 @@ const initialCartProducts = [
   {
     id: 1,
     name: 'Stylish T-Shirt',
-    img: 'https://placehold.co/100x100/FFFFFF?text=T-Shirt', // Orange background, white text
+    img: null, // Orange background, white text
     size: 'M',
     quantity: 1,
     price: 25.99,
@@ -14,7 +14,7 @@ const initialCartProducts = [
   {
     id: 2,
     name: 'Comfortable Jeans',
-    img: 'https://placehold.co/100x100/FFFFFF?text=Jeans', // Black background, white text
+    img: null, // Black background, white text
     size: 'L',
     quantity: 2,
     price: 49.99,
@@ -22,14 +22,14 @@ const initialCartProducts = [
   {
     id: 3,
     name: 'Sporty Sneakers',
-    img: 'https://placehold.co/100x100/FFFFFF?text=Sneakers', // Red background, white text
+    img: null, // Red background, white text
     size: '10',
     quantity: 1,
     price: 79.95,
   },{
     id: 4,
     name: 'Sporty Sneakers',
-    img: 'https://placehold.co/100x100/FFFFFF?text=Sneakers', // Red background, white text
+    img: null, // Red background, white text
     size: '10',
     quantity: 1,
     price: 79.95,
@@ -78,8 +78,7 @@ function App() {
           {/* Image */}
           <img
             src={product.img}
-            alt={product.name}
-            className="w-20 h-20 object-cover rounded-md"
+            className="w-10 h-10 text-xs object-cover rounded-md"
             onError={(e) => {
               e.target.onerror = null;
               e.target.src = 'https://placehold.co/80x80?text=No+Image';
@@ -89,20 +88,20 @@ function App() {
           {/* Info + Actions */}
           <div className="flex-grow flex flex-col sm:flex-row justify-between items-center w-full sm:ml-4 overflow-hidden">
             {/* Details */}
-            <div className="text-black text-center sm:text-left mb-2 sm:mb-0">
+            <div className="text-black text-xs text-center sm:text-left mb-2 sm:mb-0">
               <h3 className="font-semibold">{product.name}</h3>
               <p className="text-sm">Size: {product.size} | Qty: {product.quantity}</p>
             </div>
 
             {/* Quantity */}
-            <div className="flex items-center space-x-2 ">
+            <div className="flex text-xs items-center space-x-2 ">
               <button
                 onClick={() => handleDecrement(product.id)}
-                className="px-2 py-1 border rounded-full text-black"
+                className="px-2 py-1 border text-xs rounded-full text-black"
               >
                 -
               </button>
-              <span className="w-6 text-center text-black font-semibold">{product.quantity}</span>
+              <span className="w-4 text-center text-black font-semibold">{product.quantity}</span>
               <button
                 onClick={() => handleIncrement(product.id)}
                 className="px-2 py-1 border rounded-full text-black"
