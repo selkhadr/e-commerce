@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import bgImg from '../assets/bg.jpg';
+import bgImg0 from '../assets/bg0.jpg';
 
 
 const Hero = () => {
@@ -7,7 +7,7 @@ const Hero = () => {
     <section className="relative h-[calc(100vh-120px)] w-full flex items-center justify-center overflow-hidden"> {/* Adjusted height */}
       {/* Background Image - Using a placeholder for demonstration */}
 <img
-  src={bgImg}
+  src={bgImg0}
   alt="Tropical vacation"
   className="absolute inset-0 h-full w-full object-cover filter brightness-75 z-0"
 />

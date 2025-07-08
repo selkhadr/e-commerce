@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import bgImg from '../assets/bg.jpg'; // Make sure this path is correct
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'; // Assuming you have react-icons installed
+import bgImg0 from '../assets/bg0.jpg'; 
+import bgImg1 from '../assets/bg1.jpg'; 
+import bgImg2 from '../assets/bg2.jpg'; 
+import bgImg3 from '../assets/bg3.jpg'; 
+import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'; 
 
 function NewArrivals() {
     const newArrivals = [
@@ -11,7 +14,7 @@ function NewArrivals() {
             price: 120,
             images: [
                 {
-                    url: bgImg,
+                    url: bgImg0,
                     altText: "stylish"
                 }
             ]
@@ -22,7 +25,7 @@ function NewArrivals() {
             price: 120,
             images: [
                 {
-                    url: bgImg,
+                    url: bgImg1,
                     altText: "stylish"
                 }
             ]
@@ -33,7 +36,7 @@ function NewArrivals() {
             price: 120,
             images: [
                 {
-                    url: bgImg,
+                    url: bgImg2,
                     altText: "stylish"
                 }
             ]
@@ -44,7 +47,7 @@ function NewArrivals() {
             price: 120,
             images: [
                 {
-                    url: bgImg,
+                    url: bgImg3,
                     altText: "stylish"
                 }
             ]
@@ -55,7 +58,7 @@ function NewArrivals() {
             price: 120,
             images: [
                 {
-                    url: bgImg,
+                    url: bgImg0,
                     altText: "stylish"
                 }
             ]
@@ -66,7 +69,7 @@ function NewArrivals() {
             price: 120,
             images: [
                 {
-                    url: bgImg,
+                    url: bgImg0,
                     altText: "stylish"
                 }
             ]
@@ -77,7 +80,7 @@ function NewArrivals() {
             price: 120,
             images: [
                 {
-                    url: bgImg,
+                    url: bgImg0,
                     altText: "stylish"
                 }
             ]
@@ -88,7 +91,7 @@ function NewArrivals() {
             price: 95,
             images: [
                 {
-                    url: bgImg,
+                    url: bgImg0,
                     altText: "elegant sandal"
                 }
             ]
@@ -99,7 +102,7 @@ function NewArrivals() {
             price: 150,
             images: [
                 {
-                    url: bgImg,
+                    url: bgImg0,
                     altText: "classic loafer"
                 }
             ]
@@ -110,7 +113,7 @@ function NewArrivals() {
             price: 80,
             images: [
                 {
-                    url: bgImg,
+                    url: bgImg0,
                     altText: "sporty sneaker"
                 }
             ]
