@@ -83,7 +83,7 @@ const similarProducts = [
 ]
 
 function ProductDetails() {
-    const [mainImg, setMainImg] = useState("");
+    const [mainImg, setMainImg] = useState(null);
     const [selectedSize, setSelectedSize] = useState("");
     const [selectedColor, setSelectedColor] = useState("");
     const [quantity, setQuantity] = useState(1);
