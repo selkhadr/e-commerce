@@ -1,7 +1,13 @@
 import { IoMdClose } from "react-icons/io";
-import CartContent from "./CartContent"
+import CartContent from "../Cart/CartContent"
+import {useNavigate} from "react-router-dom"
 
 function CartDrawer({ drawerOpen, toggleDrawerOpen }) {
+  const navigate = useNavigate();
+  const handleCheckout = ()=>{
+    console.log("ddddd");
+    navigate("/checkout");
+  };
   return (
     <div
   className={`fixed top-0 right-0 h-full w-full max-w-xs bg-white shadow-xl transform transition-transform duration-300 ease-in-out z-50
@@ -27,7 +33,7 @@ function CartDrawer({ drawerOpen, toggleDrawerOpen }) {
           <p className="text-gray-700">Total:</p>
           <p className="text-red-400">$0.00</p> {/* Placeholder for total */}
         </div>
-        <button className="w-full bg-gray-800 text-white py-3 px-4 rounded-md hover:bg-gray-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+        <button onClick={handleCheckout} className="w-full bg-gray-800 text-white py-3 px-4 rounded-md hover:bg-gray-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
           Proceed to Checkout
         </button>
       </div>

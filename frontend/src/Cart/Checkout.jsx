@@ -1,0 +1,191 @@
+import { useState } from 'react';
+// bgImg0 is not used in the JSX, so it can be removed if not needed elsewhere.
+// import bgImg0 from '../assets/bg0.jpg'; 
+// useNavigate is not used in the JSX, so it can be removed if not needed elsewhere.
+// import { useNavigate } from 'react-router-dom';
+
+const cart={
+    products:[
+        {
+            name:"stylish jacket",
+            size:"M",
+            color:"Black",
+            price:120,
+            image: "https://placehold.co/100x100/E0E0E0/333333?text=Jacket", // Placeholder image
+        },
+        {
+            name:"sara sara",
+            size:"M",
+            color:"sara",
+            price:120,
+            image: "https://placehold.co/100x100/E0E0E0/333333?text=Item2", // Placeholder image
+        },
+        {
+            name:"elkhadri elkhadri",
+            size:"M",
+            color:"elkhadri",
+            price:120,
+            image: "https://placehold.co/100x100/E0E0E0/333333?text=Item3", // Placeholder image
+        },
+    ],
+    totalPrice:195,
+}
+
+function Checkout() {
+    const [CheckoutId, setCheckoutId]=useState(null);
+
+    // const navigate = useNavigate(); // Not used, so commented out
+    const [shippingAddess, setshippingAddess]= useState({
+        firstName:"",
+        lastName:"",
+        address:"",
+        city:"",
+        postalcode:"",
+        country:"", // Corrected typo from 'contry'
+        phone:"", // Corrected typo from 'phonenumber'
+    });
+
+    const handleCreateCheckout =(e)=>{
+        e.preventDefault();
+        setCheckoutId(3);
+        // In a real application, you would typically send shippingAddess and cart data to a backend
+        // and handle the payment initiation (e.g., PayPal redirect) here.
+        console.log("Shipping Address:", shippingAddess);
+        console.log("Cart:", cart);
+    }
+
+  return (
+    // Main container for the checkout page, ensuring full height and centering content
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans">
+        {/* Left section: Checkout form */}
+        <div className="w-full max-w-2xl bg-white rounded-lg shadow-xl p-6 sm:p-8 md:p-10">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6 text-center">Checkout</h2>
+            <form onSubmit={handleCreateCheckout} className="space-y-6">
+                <h3 className="text-2xl font-semibold text-gray-800 border-b pb-3 mb-6">Contact Details</h3>
+                <div className="mb-4">
+                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input 
+                        id="email"
+                        type="email" 
+                        disabled 
+                        value="user@exemple.com" 
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 bg-gray-100 cursor-not-allowed text-gray-600 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base" 
+                    />
+                </div>
+
+                <h3 className="text-2xl font-semibold text-gray-800 border-b pb-3 mb-6 mt-8">Delivery Information</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                        <input 
+                            id="firstName"
+                            required
+                            onChange={(e)=>setshippingAddess({...shippingAddess,firstName:e.target.value})}
+                            value={shippingAddess.firstName} 
+                            type="text" 
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base" 
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                        <input 
+                            id="lastName"
+                            required
+                            onChange={(e)=>setshippingAddess({...shippingAddess,lastName:e.target.value})}
+                            value={shippingAddess.lastName} 
+                            type="text" 
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base" 
+                        />
+                    </div>
+                </div>
+                
+                <div className="mb-4">
+                    <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+                    <input 
+                        id="address"
+                        required
+                        onChange={(e)=>setshippingAddess({...shippingAddess,address:e.target.value})}
+                        value={shippingAddess.address} 
+                        type="text" 
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base" 
+                    />
+                </div>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                        <input 
+                            id="city"
+                            required
+                            onChange={(e)=>setshippingAddess({...shippingAddess,city:e.target.value})}
+                            value={shippingAddess.city} 
+                            type="text" 
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base" 
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+                        <input 
+                            id="postalCode"
+                            required
+                            onChange={(e)=>setshippingAddess({...shippingAddess,postalcode:e.target.value})}
+                            value={shippingAddess.postalcode} 
+                            type="text" 
+                            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base" 
+                        />
+                    </div>
+                </div>
+                
+                <div className="mb-4">
+                    <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">Country</label>
+                    <input 
+                        id="country"
+                        required
+                        onChange={(e)=>setshippingAddess({...shippingAddess,country:e.target.value})} // Corrected to 'country'
+                        value={shippingAddess.country} // Corrected to 'country'
+                        type="text" 
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base" 
+                    />
+                </div>
+                
+                <div className="mb-4">
+                    <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                    <input 
+                        id="phoneNumber"
+                        required
+                        onChange={(e)=>setshippingAddess({...shippingAddess,phone:e.target.value})} // Corrected to 'phone'
+                        value={shippingAddess.phone} // Corrected to 'phone'
+                        type="text" 
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base" 
+                    />
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-gray-200">
+                    {!CheckoutId ? (
+                        <button 
+                            type="submit" 
+                            className="w-full bg-indigo-600 text-white py-3 px-4 rounded-md font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out text-lg"
+                        >
+                            Continue to PayPal
+                        </button>
+                    ) : (
+                        <div className="text-center">
+                            <h3 className="text-2xl font-semibold text-gray-800 mb-4">Pay with PayPal</h3>
+                            {/* Placeholder for PayPal integration */}
+                            <div className="bg-blue-50 border border-blue-200 text-blue-800 p-6 rounded-lg text-lg">
+                                {/* This is where your PayPal component or SDK integration would go */}
+                                <p>PayPal integration will appear here after confirming your details.</p>
+                                <p className="mt-2 text-sm text-blue-600">
+                                    (e.g., PayPal button, iframe, or payment details form)
+                                </p>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </form>
+        </div>
+    </div>
+  )
+}
+
+export default Checkout;

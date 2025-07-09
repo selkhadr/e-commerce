@@ -36,7 +36,7 @@ const initialCartProducts = [
   },
 ];
 
-function App() {
+function CartContent() {
   const [cartProducts, setCartProducts] = useState(initialCartProducts);
 
   // Function to handle quantity decrement
@@ -128,4 +128,4 @@ function App() {
 }
 
 
-export default App;
+export default CartContent;
