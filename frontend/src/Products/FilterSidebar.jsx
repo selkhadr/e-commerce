@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom'; // Assuming react-router-dom is available for useSearchParams
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 function FilterSidebar() {
   const navigate = useNavigate();
@@ -11,11 +11,9 @@ function FilterSidebar() {
     size: [],
     material: [],
     brand: [],
-    price:0,
+    minPrice: 0,
+    maxPrice: 100,
   });
-
-  // Local state for price range sliders
-  const [priceRange, setPriceRange] = useState([0, 100]);
 
   // Static filter options
   const categories = ["Top Wear", "Bottom Wear", "Footwear", "Accessories"];
@@ -36,28 +34,32 @@ function FilterSidebar() {
       size: params.size ? params.size.split(',') : [],
       material: params.material ? params.material.split(',') : [],
       brand: params.brand ? params.brand.split(',') : [],
-      price: parseInt(params.price) || 0,
+      minPrice: parseInt(params.minPrice) || 0,
+      maxPrice: parseInt(params.maxPrice) || 100,
     });
-
-
   }, [searchParams]);
 
   // Effect to update URL search parameters when filters change
   useEffect(() => {
     const newSearchParams = new URLSearchParams();
+    
     for (const key in filters) {
       const value = filters[key];
       if (Array.isArray(value) && value.length > 0) {
         newSearchParams.set(key, value.join(','));
       } else if (typeof value === 'string' && value !== "") {
         newSearchParams.set(key, value);
-      } else if (typeof value === 'number' && value !== 0 && value !== 100) { // Only add if not default
-        newSearchParams.set(key, String(value));
+      } else if (typeof value === 'number') {
+        // Always include price values, even if they're defaults
+        if (key === 'minPrice' && value !== 0) {
+          newSearchParams.set(key, String(value));
+        } else if (key === 'maxPrice' && value !== 100) {
+          newSearchParams.set(key, String(value));
+        }
       }
     }
     setSearchParams(newSearchParams, { replace: true });
   }, [filters, setSearchParams]);
-
 
   // Handler for all filter changes (radio, checkbox, text)
   const handleFilterChange = (e) => {
@@ -74,45 +76,27 @@ function FilterSidebar() {
       newFilter[name] = value;
     }
     setFilters(newFilter);
-    updateUrlParams(newFilter);
     console.log(newFilter);
   };
-
-  const updateUrlParams = (newFilter)=>{
-    const params = new URLSearchParams();
-    Object.keys(newFilter).forEach((key)=>{
-      if(Array.isArray(newFilter[key])&& newFilter[key].length>0)
-      {
-        params.append(key,newFilter[key].join(","));
-      }
-      else if(newFilter[key]){
-        params.append(key,newFilter[key]);
-      }
-    })
-      setSearchParams(params);
-      navigate(`?${params.toString()}`);
-  }
-  
 
   // Handler for color button clicks
   const handleColorChange = (color) => {
     setFilters(prevFilters => ({
       ...prevFilters,
-      color: prevFilters.color === color ? "" : color // Toggle color selection
+      color: prevFilters.color === color ? "" : color
     }));
   };
 
-
-    const handlePriceChange =(e)=>{
-      const newPrice = e.target.value;
-      setPriceRange([0,newPrice]);
-      const newFilter={...filters,minPrice:0,maxPrice:newPrice};
-      setFilters(filters);
-      updateUrlParams(newFilter);
-    }
-
-
-
+  // Fixed price change handler
+  const handlePriceChange = (e) => {
+    const newPrice = parseInt(e.target.value);
+    const newFilter = {
+      ...filters,
+      maxPrice: newPrice
+    };
+    setFilters(newFilter);
+    console.log("Price changed:", newFilter);
+  };
 
   return (
     <div className="w-full md:w-64 p-4 bg-white rounded-lg shadow-md font-sans flex flex-col space-y-6">
@@ -173,7 +157,6 @@ function FilterSidebar() {
               style={{ backgroundColor: color.toLowerCase() }}
               title={color}
             >
-              {/* Add a checkmark or icon if selected for better UX */}
               {filters.color === color && (
                 <span className="text-white text-xs font-bold flex items-center justify-center h-full">✓</span>
               )}
@@ -254,18 +237,20 @@ function FilterSidebar() {
       {/* Price Range Filter */}
       <div>
         <label className="block text-gray-600 font-medium mb-2">
-          price range
+          Price Range
         </label>
-        <input type="range"
-        name="priceRange"
-        min={0}
-        max={100}
-        value={priceRange[1]}
-        onChange={handlePriceChange}
-        className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer" />
+        <input 
+          type="range"
+          name="maxPrice"
+          min={0}
+          max={100}
+          value={filters.maxPrice}
+          onChange={handlePriceChange}
+          className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer" 
+        />
         <div className="flex justify-between text-gray-600 mt-2">
-          <span>$0</span>
-          <span>${priceRange[1]}</span>
+          <span>${filters.minPrice}</span>
+          <span>${filters.maxPrice}</span>
         </div>
       </div>
     </div>
