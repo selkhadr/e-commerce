@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom'; // Assuming react-router-dom is available for useSearchParams
+import { useSearchParams, useNavigate } from 'react-router-dom'; // Assuming react-router-dom is available for useSearchParams
 
 function FilterSidebar() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [filters, setFilters] = useState({
     category: "",
@@ -10,13 +11,11 @@ function FilterSidebar() {
     size: [],
     material: [],
     brand: [],
-    minPrice: 0,
-    maxPrice: 100,
+    price:0,
   });
 
   // Local state for price range sliders
-  const [currentMinPrice, setCurrentMinPrice] = useState(0);
-  const [currentMaxPrice, setCurrentMaxPrice] = useState(100);
+  const [priceRange, setPriceRange] = useState([0, 100]);
 
   // Static filter options
   const categories = ["Top Wear", "Bottom Wear", "Footwear", "Accessories"];
@@ -37,13 +36,9 @@ function FilterSidebar() {
       size: params.size ? params.size.split(',') : [],
       material: params.material ? params.material.split(',') : [],
       brand: params.brand ? params.brand.split(',') : [],
-      minPrice: parseInt(params.minPrice) || 0,
-      maxPrice: parseInt(params.maxPrice) || 100,
+      price: parseInt(params.price) || 0,
     });
 
-    // Update local price range states
-    setCurrentMinPrice(parseInt(params.minPrice) || 0);
-    setCurrentMaxPrice(parseInt(params.maxPrice) || 100);
 
   }, [searchParams]);
 
@@ -79,8 +74,25 @@ function FilterSidebar() {
       newFilter[name] = value;
     }
     setFilters(newFilter);
+    updateUrlParams(newFilter);
     console.log(newFilter);
   };
+
+  const updateUrlParams = (newFilter)=>{
+    const params = new URLSearchParams();
+    Object.keys(newFilter).forEach((key)=>{
+      if(Array.isArray(newFilter[key])&& newFilter[key].length>0)
+      {
+        params.append(key,newFilter[key].join(","));
+      }
+      else if(newFilter[key]){
+        params.append(key,newFilter[key]);
+      }
+    })
+      setSearchParams(params);
+      navigate(`?${params.toString()}`);
+  }
+  
 
   // Handler for color button clicks
   const handleColorChange = (color) => {
@@ -90,25 +102,16 @@ function FilterSidebar() {
     }));
   };
 
-  // Handler for min price range slider
-  const handleMinPriceChange = (e) => {
-    let value = parseInt(e.target.value);
-    if (value > currentMaxPrice) {
-      value = currentMaxPrice; // Ensure minPrice doesn't exceed maxPrice
-    }
-    setCurrentMinPrice(value);
-    setFilters(prevFilters => ({ ...prevFilters, minPrice: value }));
-  };
 
-  // Handler for max price range slider
-  const handleMaxPriceChange = (e) => {
-    let value = parseInt(e.target.value);
-    if (value < currentMinPrice) {
-      value = currentMinPrice; // Ensure maxPrice doesn't go below minPrice
+    const handlePriceChange =(e)=>{
+      const newPrice = e.target.value;
+      setPriceRange([0,newPrice]);
+      const newFilter={...filters,minPrice:0,maxPrice:newPrice};
+      setFilters(filters);
+      updateUrlParams(newFilter);
     }
-    setCurrentMaxPrice(value);
-    setFilters(prevFilters => ({ ...prevFilters, maxPrice: value }));
-  };
+
+
 
 
   return (
@@ -249,29 +252,20 @@ function FilterSidebar() {
       </div>
 
       {/* Price Range Filter */}
-      <div className="space-y-2">
-        <label className="block text-lg font-semibold text-gray-700">Price Range</label>
-        <div className="flex items-center justify-between text-gray-800 font-medium">
-          <span>${currentMinPrice}</span>
-          <span>${currentMaxPrice}</span>
-        </div>
-        <div className="relative pt-1">
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={currentMinPrice}
-            onChange={handleMinPriceChange}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-sm accent-blue-500"
-          />
-          <input
-            type="range"
-            min={0}
-            max={100}
-            value={currentMaxPrice}
-            onChange={handleMaxPriceChange}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer range-sm accent-blue-500 mt-2"
-          />
+      <div>
+        <label className="block text-gray-600 font-medium mb-2">
+          price range
+        </label>
+        <input type="range"
+        name="priceRange"
+        min={0}
+        max={100}
+        value={priceRange[1]}
+        onChange={handlePriceChange}
+        className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer" />
+        <div className="flex justify-between text-gray-600 mt-2">
+          <span>$0</span>
+          <span>${priceRange[1]}</span>
         </div>
       </div>
     </div>
