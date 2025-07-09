@@ -29,7 +29,7 @@ const Navbar = () => {
 
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex space-x-8">
-            <Link to="/" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
+            <Link to="/collections/all" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
               Men
             </Link>
             <Link to="/" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">

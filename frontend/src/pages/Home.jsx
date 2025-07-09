@@ -8,6 +8,7 @@ import bgImg0 from '../assets/bg0.jpg';
 import bgImg1 from '../assets/bg1.jpg';
 import bgImg2 from '../assets/bg2.jpg';
 import bgImg3 from '../assets/bg3.jpg';
+import FeaturedCollection from '../Products/FeaturedCollection';
 
 
 
@@ -79,6 +80,7 @@ function Home() {
         </h2>
         <ProductGrid products={placeholderProducts} />
       </div>
+      <FeaturedCollection/>
     </>
   )
 }

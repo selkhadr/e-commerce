@@ -1,0 +1,129 @@
+import { useEffect, useState, useRef } from "react";
+import FilterSidebar from "../Products/FilterSidebar"; // Assuming these components exist
+import SortOptions from "../Products/SortOptions"; // Assuming these components exist
+import ProductGrid from "../Products/ProductGrid"; // Assuming these components exist
+import { FaFilter } from "react-icons/fa"; // Assuming you have react-icons installed
+
+// Placeholder images for demonstration. In a real app, import your actual images.
+const bgImg0 = "https://via.placeholder.com/150/FF0000/FFFFFF?text=Product0";
+const bgImg1 = "https://via.placeholder.com/150/0000FF/FFFFFF?text=Product1";
+const bgImg2 = "https://via.placeholder.com/150/00FF00/FFFFFF?text=Product2";
+const bgImg3 = "https://via.placeholder.com/150/FFFF00/000000?text=Product3";
+
+function CollectionPage() {
+  const [products, setProducts] = useState([]);
+  const sidebarRef = useRef(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      const fetchedProduct = [
+        {
+          _id: 1,
+          name: "Product 1",
+          price: 100,
+          images: [{ url: bgImg1 }],
+        },
+        {
+          _id: 2,
+          name: "Product 2",
+          price: 200,
+          images: [{ url: bgImg2 }],
+        },
+        {
+          _id: 3,
+          name: "Product 3",
+          price: 300,
+          images: [{ url: bgImg3 }],
+        },
+        {
+          _id: 4,
+          name: "Product 4",
+          price: 400,
+          images: [{ url: bgImg1 }],
+        },
+        {
+          _id: 5,
+          name: "Product 5",
+          price: 500,
+          images: [{ url: bgImg1 }],
+        },
+        {
+          _id: 6, // Changed _id to be unique
+          name: "Product 6",
+          price: 200,
+          images: [{ url: bgImg2 }],
+        },
+        {
+          _id: 7, // Changed _id to be unique
+          name: "Product 7",
+          price: 300,
+          images: [{ url: bgImg3 }],
+        },
+        {
+          _id: 8, // Changed _id to be unique
+          name: "Product 8",
+          price: 400,
+          images: [{ url: bgImg0 }],
+        },
+      ];
+      setProducts(fetchedProduct);
+    }, 1000);
+  }, []);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const handleClickOutside = (event) => {
+    if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+      setIsSidebarOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []); // Empty dependency array ensures this runs once on mount and cleans up on unmount
+
+  return (
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
+      {/* Filter Button for Mobile */}
+      <button
+        onClick={toggleSidebar}
+        className="md:hidden fixed top-4 left-4 z-40 p-3 bg-gray-800 text-white rounded-full shadow-lg hover:bg-gray-700 transition-colors duration-200"
+        aria-label="Toggle Filter Sidebar"
+      >
+        <FaFilter className="text-xl" />
+      </button>
+
+      {/* Filter Sidebar */}
+      <div
+        ref={sidebarRef}
+        className={`fixed inset-y-0 left-0 w-64 bg-white shadow-xl z-50 transform transition-transform h-full overflow-y-auto duration-300 ease-in-out
+          ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}
+          md:relative md:translate-x-0 md:w-64 md:flex-shrink-0 md:shadow-none md:border-r md:border-gray-200
+        `}
+      >
+        <div className="p-4">
+          <FilterSidebar />
+        </div>
+      </div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 p-4 md:p-6 lg:p-8">
+        <h2 className="text-3xl font-extrabold text-gray-800 mb-6 border-b pb-3">All Collections</h2>
+        <div className="mb-6">
+          <SortOptions />
+        </div>
+        <div>
+          <ProductGrid products={products} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default CollectionPage;
