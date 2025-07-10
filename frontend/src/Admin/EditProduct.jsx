@@ -16,10 +16,10 @@ function EditProduct() {
     gender:"",
     images:[
       {
-        url:"https://picsum.photos.150?random=1",
+        url:"https://picsum.photos/150?random=1",
       },
       {
-        url:"https://picsum.photos.150?random=2",
+        url:"https://picsum.photos/150?random=2",
       },
     ],
   });
@@ -27,10 +27,18 @@ function EditProduct() {
     const {name,value}=e.target;
     setProductData((prevData)=>({...prevData,[name]: value}));
   }
+  const handleImageUpload = async(e)=>{
+    const file = e.target.files[0];
+    console.log(file);
+  }
+  const handleSubmit =(e)=>{
+    e.preventDefault();
+    console.log(productData);
+  }
   return (
     <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
       <h2 className="text-3xl font-bold mb-6">Edit Product</h2>
-      <form >
+      <form onSubmit={handleSubmit}>
         {/* name */}
         <div className="mb-6">
           <label className="block font-semibold mb-2">Product Name</label>
@@ -53,7 +61,7 @@ function EditProduct() {
         {/* count in stock */}
         <div className="mb-6">
           <label className="block font-semibold mb-2">count in stock</label>
-          <input type="number" name="contInStock" value={productData.countInStock} 
+          <input type="number" name="countInStock" value={productData.countInStock} 
           onChange={handleChange} 
           className="w-full border border-gray-300 rounded-md p-2" />
         </div>
@@ -78,9 +86,22 @@ function EditProduct() {
           onChange={(e)=>setProductData({...productData,colors:e.target.value.split(",").map((color)=>color.trim()),})} 
           className="w-full border border-gray-300 rounded-md p-2" />
         </div>
-
-
-
+        {/* image upload */}
+        <div className="mb-6">
+          <label className="block font-semibold mb-2">upload image</label>
+          <input type="file" onChange={handleImageUpload} />
+          <div className="flex gap-4 mt-4">
+            {productData.images.map((image, index)=>(
+              <div key={index}>
+                <img src={image.url} className="w-20 h-20 object-cover rounded-md shadow-md" />
+              </div>
+            ))}
+          </div>
+        </div>
+        <button type="submit" className="w-full bg-green-500
+         text-white py-2 rounded-md hover:bg-green-600 
+         transition-colors">upload product</button>
+ 
         
       </form>
     </div>
