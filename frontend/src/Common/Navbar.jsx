@@ -45,7 +45,8 @@ const Navbar = () => {
 
           {/* Icons and Mobile Menu Button */}
           <div className="flex items-center space-x-6">
-            <Link to="#" className="text-gray-600 hover:text-gray-900 text-xl">
+            <Link to="/admin" className="block bg-black px-2 rounded text-sm text-white">Admin</Link>
+            <Link to="/profile" className="text-gray-600 hover:text-gray-900 text-xl">
               <HiOutlineUser />
             </Link>
             <button onClick={toggleDrawerOpen} className="relative text-gray-600 hover:text-gray-900 text-xl focus:outline-none">
