@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function MyOrders() {
   const [orders, setOrders] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Simulate fetching orders from an API
@@ -42,6 +44,10 @@ function MyOrders() {
       setOrders(mockOrders);
     }, 1000); // Simulate network delay
   }, []);
+
+  const handleRowClick = (orderId)=>{
+    navigate(`/orders/${orderId}`);
+  }
 
   return (
     // Main container div with responsive padding and max width
@@ -88,7 +94,9 @@ function MyOrders() {
             {orders.length > 0 ? (
               // Map through orders and render a table row for each
               orders.map((order) => (
-                <tr key={order._id} className="hover:bg-gray-50 transition-colors duration-200">
+                <tr key={order._id} 
+                onClick={()=>handleRowClick(order._id)}
+                className="hover:bg-gray-50 transition-colors duration-200">
                   {/* Table data cells */}
                   <td className="px-4 py-4 whitespace-nowrap">
                     {/* Image for the first item in the order, with fallback */}

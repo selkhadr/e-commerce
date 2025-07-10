@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from "react-router-dom";
+import PayPalButton from './PayPalButton';
 // bgImg0 is not used in the JSX, so it can be removed if not needed elsewhere.
 // import bgImg0 from '../assets/bg0.jpg'; 
 // useNavigate is not used in the JSX, so it can be removed if not needed elsewhere.
@@ -33,7 +35,7 @@ const cart={
 
 function Checkout() {
     const [CheckoutId, setCheckoutId]=useState(null);
-
+    const navigate = useNavigate();
     // const navigate = useNavigate(); // Not used, so commented out
     const [shippingAddess, setshippingAddess]= useState({
         firstName:"",
@@ -44,6 +46,11 @@ function Checkout() {
         country:"", // Corrected typo from 'contry'
         phone:"", // Corrected typo from 'phonenumber'
     });
+
+    const handlePaymentSuccess = (details)=>{
+        console.log("payment success ", details);
+        navigate("/order-confirmation");
+    }
 
     const handleCreateCheckout =(e)=>{
         e.preventDefault();
@@ -172,17 +179,47 @@ function Checkout() {
                         <div className="text-center">
                             <h3 className="text-2xl font-semibold text-gray-800 mb-4">Pay with PayPal</h3>
                             {/* Placeholder for PayPal integration */}
-                            <div className="bg-blue-50 border border-blue-200 text-blue-800 p-6 rounded-lg text-lg">
-                                {/* This is where your PayPal component or SDK integration would go */}
-                                <p>PayPal integration will appear here after confirming your details.</p>
-                                <p className="mt-2 text-sm text-blue-600">
-                                    (e.g., PayPal button, iframe, or payment details form)
-                                </p>
-                            </div>
+                            <PayPalButton amount={100} onSuccess={handlePaymentSuccess} 
+                            onError={(err)=>alert("payment failled try again ", err)}/>
                         </div>
                     )}
                 </div>
             </form>
+        </div>
+        {/* right section */}
+        <div className="bg-gray-50 p-6 rounded-lg">
+            <h3 className="text-lg mb-4"> order summer</h3>
+            <div className="border-t py-4 mb-4">
+                    {cart.products.map((product, index)=>(
+                        <div  key={index} className="flex items-start justify-between py-2 border-b">
+                            <div className="flex items-start">
+                                <img src={product.image}
+                                alt={product.name}
+                                className="w-20 h-24 object-cover mr-4" />
+                                <div>
+                                    <h3 className="text-md">{product.name}</h3>
+                                    <p className="text-gray-50">Size: {product.size}</p>
+                                    <p className="text-gray-50">Color: {product.color}</p>
+                                </div>
+                            </div>
+                                <p className="text-xl">${product.price?.toLocaleString()}</p>
+                        </div>
+                    ))}
+            </div>
+            <div className="flex justify-between items-center text-lg mb-4">
+                <p>Subtotal</p>
+                <p>${cart.totalPrice?.toLocaleString()}</p>
+            </div>
+            <div className="flex justify-between items-center text-lg">
+                <p>shiping</p>
+                <p>free</p>
+            </div>
+            <div className="flex justify-between items-center text-lg mt-4 border-t pt-4">
+                <p>total</p>
+                <p>
+                    ${cart.totalPrice?.toLocaleString()}
+                </p>
+            </div>
         </div>
     </div>
   )
