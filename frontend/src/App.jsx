@@ -13,6 +13,8 @@ import MyOrders from './pages/MyOrders'
 import AdminLayout from './Admin/AdminLayout'
 import AdminHomePage from './pages/AdminHomePage'
 import UserManagement from './Admin/UserManagement'
+import ProductManagement from './Admin/ProductManagement'
+import EditProduct from './Admin/EditProduct'
 
 const App = () => {
   return (
@@ -34,6 +36,8 @@ const App = () => {
         <Route path="/admin" element={<AdminLayout/>}>
           <Route index element={<AdminHomePage/>}></Route>
           <Route path="users" element={<UserManagement/>}></Route>
+          <Route path="products" element={<ProductManagement/>}></Route>
+          <Route path="products/:id/edit" element={<EditProduct/>}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
