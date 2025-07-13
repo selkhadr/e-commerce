@@ -1,124 +1,29 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import bgImg0 from '../assets/bg0.jpg'; 
 import bgImg1 from '../assets/bg1.jpg'; 
 import bgImg2 from '../assets/bg2.jpg'; 
 import bgImg3 from '../assets/bg3.jpg'; 
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'; 
+import axios from "axios";
 
 function NewArrivals() {
-    const newArrivals = [
-        {
-            _id: "1",
-            name: "Stylish Belie",
-            price: 120,
-            images: [
-                {
-                    url: bgImg0,
-                    altText: "stylish"
-                }
-            ]
-        },
-        {
-            _id: "2",
-            name: "Stylish Belie",
-            price: 120,
-            images: [
-                {
-                    url: bgImg1,
-                    altText: "stylish"
-                }
-            ]
-        },
-        {
-            _id: "3",
-            name: "Stylish Belie",
-            price: 120,
-            images: [
-                {
-                    url: bgImg2,
-                    altText: "stylish"
-                }
-            ]
-        },
-        {
-            _id: "4",
-            name: "Stylish Belie",
-            price: 120,
-            images: [
-                {
-                    url: bgImg3,
-                    altText: "stylish"
-                }
-            ]
-        },
-        {
-            _id: "5",
-            name: "Stylish Belie",
-            price: 120,
-            images: [
-                {
-                    url: bgImg0,
-                    altText: "stylish"
-                }
-            ]
-        },
-        {
-            _id: "6",
-            name: "Stylish Belie",
-            price: 120,
-            images: [
-                {
-                    url: bgImg0,
-                    altText: "stylish"
-                }
-            ]
-        },
-        {
-            _id: "7",
-            name: "Stylish Belie",
-            price: 120,
-            images: [
-                {
-                    url: bgImg0,
-                    altText: "stylish"
-                }
-            ]
-        },
-        {
-            _id: "8",
-            name: "Elegant Sandal",
-            price: 95,
-            images: [
-                {
-                    url: bgImg0,
-                    altText: "elegant sandal"
-                }
-            ]
-        },
-        {
-            _id: "9",
-            name: "Classic Loafer",
-            price: 150,
-            images: [
-                {
-                    url: bgImg0,
-                    altText: "classic loafer"
-                }
-            ]
-        },
-        {
-            _id: "10",
-            name: "Sporty Sneaker",
-            price: 80,
-            images: [
-                {
-                    url: bgImg0,
-                    altText: "sporty sneaker"
-                }
-            ]
-        },
-    ];
+    const [newArrivals, setNewArrivals]=useState([]);
+
+
+    useEffect(()=>{
+        const fetchNewArrivals = async()=>{
+            try {
+                const response = await axios.get(
+                    `${import.meta.env.VITE_BACKEND_URL}/api/products/new-arrivals`
+                );
+                setNewArrivals(response.data);
+            } catch (error) {
+                console.error(error);
+            };
+        };
+        fetchNewArrivals();
+    },[]);
 
     // Ref for the scrollable container
     const scrollContainerRef = React.useRef(null);

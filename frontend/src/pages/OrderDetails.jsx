@@ -1,37 +1,20 @@
 import { useEffect, useState } from "react";
 import {useParams, Link} from "react-router-dom"
+import { fetchOrderDetails } from "../redux/slices/orderSlice";
 
 function OrderDetails() {
     const {id}=useParams();
-    const [orderDetails,setOrderDetails]=useState(null);
+    const dispatch = useDispatch();
+    const {orderDetails,loading,error} = useSelector((state)=>state.orders);
+
     useEffect(()=>{
-        const mockOrderDetails={
-            _id:id,
-            createAt:new Date(),
-            isPaid:true,
-            isDelivered:false,
-            paymentMethod:"paypal",
-            shippingMethod:"standard",
-            shippingAddress:{city:"new yourk",contry:"usa"},
-            orderItem:[
-                {
-                    productid:"1",
-                    name:"jacket",
-                    price:12,
-                    quantity:1,
-                    image: "https://picsum.photos/150?random=1"
-                },
-                {
-                    productid:"2",
-                    name:"sara",
-                    price:33,
-                    quantity:1,
-                    image: "https://picsum.photos/150?random=1"
-                },
-            ],
-        };
-        setOrderDetails(mockOrderDetails);
-    },[id])
+        dispatch(fetchOrderDetails(id));
+    },[dispatch,id])
+
+    if(loading)return <p>loading...</p>;
+    if(error)return <p>Error:{error}</p>;
+
+
   return (
     <div className="max-w-7xl mx-auto p-4 sm:p-6">
         <h2 className="text-2xl md:text-3xl font-bold mb-6">order details</h2>
@@ -105,7 +88,7 @@ function OrderDetails() {
                             ${item.price}
                         </td>
                         <td className="py-2 px-4">
-                            ${item.quantity}
+                            {item.quantity}
                         </td>
                         <td className="py-2 px-4">
                             ${item.price * item.quantity}

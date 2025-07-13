@@ -4,9 +4,14 @@ import {useNavigate} from "react-router-dom"
 
 function CartDrawer({ drawerOpen, toggleDrawerOpen }) {
   const navigate = useNavigate();
+  const {user,guestId} = useSelector((state)=>state.auth);
+  const {cart} = useSelector((state)=>state.cart);
+  const userId = user?user._id:null;
   const handleCheckout = ()=>{
-    console.log("ddddd");
     toggleDrawerOpen();
+    if(!user){
+      navigate("/login?redirect=checkout");
+    }
     navigate("/checkout");
   };
   return (
@@ -26,7 +31,12 @@ function CartDrawer({ drawerOpen, toggleDrawerOpen }) {
       </div>
 
       <div className="flex-grow p-1 overflow-y-auto">
-        <CartContent/>
+        {cart && cart?.products?.length>0?(
+
+          <CartContent cart={cart} userId={userId} guestId={guestId}/>):(
+            <p>your cart is empty</p>
+          )
+        }
       </div>
 
       <div className="p-4 border-t border-gray-200 flex flex-col space-y-3">
@@ -34,9 +44,14 @@ function CartDrawer({ drawerOpen, toggleDrawerOpen }) {
           <p className="text-gray-700">Total:</p>
           <p className="text-red-400">$0.00</p> {/* Placeholder for total */}
         </div>
+        {cart && cart?.products?.length>0 && (
+          <>
         <button onClick={handleCheckout} className="w-full bg-gray-800 text-white py-3 px-4 rounded-md hover:bg-gray-700 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
           Proceed to Checkout
         </button>
+
+          </>
+        )}
       </div>
     </div>
   );

@@ -10,6 +10,11 @@ const Navbar = () => {
   const toggleNavDrawerOpen = () => {
     setNavDrawerOpen(!navDrawerOpen);
   };
+  const {cart} = useSelector((state)=>state.cart);
+  const {user} = useSelector((state)=>state.auth);
+
+  const cartItemCount = cart?.products?.reduce((total,product)=>total+product.quantity,
+  0) || 0;
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const toggleDrawerOpen = () => {
@@ -22,38 +27,42 @@ const Navbar = () => {
       <nav className="bg-white shadow-md p-4 sticky top-0 z-30"> 
         <div className="container mx-auto flex justify-between items-center">
           <div className="flex-shrink-0">
-            <Link to="#" className="text-2xl font-bold text-gray-800 hover:text-gray-400 transition-colors duration-300">
+            <Link to="/" className="text-2xl font-bold text-gray-800 hover:text-gray-400 transition-colors duration-300">
               Rabbit
             </Link>
           </div>
 
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex space-x-8">
-            <Link to="/collections/all" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
+            <Link to="/collections/all?gender=Men" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
               Men
             </Link>
-            <Link to="/" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
+            <Link to="/collections/all?gender=Men" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
               Women
             </Link>
-            <Link to="/" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
+            <Link to="/collections/all?category=Top Wear" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
               Top Wear
             </Link>
-            <Link to="/" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
+            <Link to="/collections/all?category=bottom wear" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
               Bottom Wear
             </Link>
           </div>
 
           {/* Icons and Mobile Menu Button */}
           <div className="flex items-center space-x-6">
-            <Link to="/admin" className="block bg-black px-2 rounded text-sm text-white">Admin</Link>
+            {user && user.role==="admin"&&(
+            <Link to="/admin" className="block bg-black px-2 rounded text-sm text-white">Admin</Link>)}
             <Link to="/profile" className="text-gray-600 hover:text-gray-900 text-xl">
               <HiOutlineUser />
             </Link>
             <button onClick={toggleDrawerOpen} className="relative text-gray-600 hover:text-gray-900 text-xl focus:outline-none">
               <HiOutlineShoppingBag />
-              <span className="absolute -top-2 -right-2 bg-gray-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                4
+              {cartItemCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-gray-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cartItemCount}
               </span>
+              )}
+              
             </button>
 
             {/* Search Bar and Mobile Menu Icon */}

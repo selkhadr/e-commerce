@@ -1,16 +1,28 @@
 
 
-import  { useState } from "react";
+import  { useEffect, useState } from "react";
+import  { useDispatch,useSelector } from "react-redux";
+import  { useNavigate } from "react-router-dom";
+import { addUser, deleteUser, fetchUsers, updateUser } from "../redux/slices/adminSlice";
 
 function UserManagement() {
-    const users =[
-        {
-            _id:1,
-            name:"john doe",
-            email: "john@gmail.com",
-            role:"admin",
-        },
-    ];
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const {user}= useSelector((state)=>state.auth);
+    const {users,loading,error} = useSelector((state)=>state.admin);
+
+    useEffect(()=>{
+        if(user&&user.role!=="admin"){
+            navigate("/");
+        }
+    },[user,navigate]);
+
+    useEffect(()=>{
+        if(user&&user.role!=="admin")
+            dispatch(fetchUsers());
+    },[dispatch, user]);
+
     const [formData, setFormData]=useState({
         name:"",
         email:"",
@@ -24,11 +36,15 @@ function UserManagement() {
         })
     }
     const handleRoleChange =(userId, newRole)=>{
+        dispatch(updateUser({id:userId,role:newRole}));
         console.log({id:userId, role:newRole});
     }
 
+    
+
     const handleSubmit = (e)=>{
         e.preventDefault();
+        dispatch(addUser(formData));
         console.log(formData);
         // reset the form after submition
         setFormData({
@@ -40,7 +56,7 @@ function UserManagement() {
     }
     const handleDeleteUser = (userId)=>{
         if(window.confirm("are you sure you want to delete this user?")){
-            console.log("deleting user with id: ",userId)
+            dispatch(deleteUser(userId));
         }
     }
   return (
@@ -48,6 +64,8 @@ function UserManagement() {
         <h2 className="text-2xl font-bold mb-4">
             user management
         </h2>
+        {loading && <p>loading...</p>}
+        {error && <p>error...</p>}
         {/* new user form */}
         <div className="p-6 rounded-lg mb-6">
             <h3 className="text-lg font-bold mb-4">Add new User</h3>

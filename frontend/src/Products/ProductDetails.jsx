@@ -5,89 +5,31 @@ import bgImg2 from '../assets/bg2.jpg';
 import bgImg3 from '../assets/bg3.jpg';
 import ProductGrid from './ProductGrid';
 import toast from 'react-hot-toast'; // Assuming you are using react-hot-toast for toasts
+import { useParams } from 'react-router-dom';
+import { fetchProductDetails, fetchSimilarProducts } from '../redux/slices/productsSlice';
+import { addToCart } from '../redux/slices/cartSlice';
 
-const selectedProduct = {
-    name: "stylish jacket",
-    price: 120,
-    originalPrice: 150,
-    description: "This is a stylish jacket, perfect for any occasion. Made with high-quality materials for comfort and durability.",
-    brand: "FashionBrand",
-    material: "Leather",
-    sizes: ["s", "m", "l", "xl"],
-    colors: ["red", "black", "blue"], // Added blue for more color options
-    images: [
-        {
-            url: bgImg0,
-            alt: "Stylish Jacket - Red"
-        },
-        {
-            url: bgImg1, // Using the same image for demonstration, replace with different images if available
-            alt: "Stylish Jacket - Black"
-        },
-        {
-            url: bgImg2,
-            alt: "Stylish Jacket - Blue"
-        },
-        {
-            url: bgImg0,
-            alt: "Stylish Jacket - Red"
-        },
-        {
-            url: bgImg1, // Using the same image for demonstration, replace with different images if available
-            alt: "Stylish Jacket - Black"
-        },
-        {
-            url: bgImg2,
-            alt: "Stylish Jacket - Blue"
-        },
-        {
-            url: bgImg0,
-            alt: "Stylish Jacket - Red"
-        },
-        {
-            url: bgImg1, // Using the same image for demonstration, replace with different images if available
-            alt: "Stylish Jacket - Black"
-        },
-        {
-            url: bgImg2,
-            alt: "Stylish Jacket - Blue"
-        },
-    ]
-};
 
-const similarProducts = [
-    {
-        _id:1,
-        name:"product 1",
-        price:100,
-        images:[{url: bgImg1}],
-    },
-    {
-        _id:2,
-        name:"product 2",
-        price:200,
-        images:[{url: bgImg2}],
-    },
-    {
-        _id:3,
-        name:"product 3",
-        price:300,
-        images:[{url: bgImg3}],
-    },
-    {
-        _id:4,
-        name:"product 4",
-        price:400,
-        images:[{url: bgImg1}],
-    },
-]
 
-function ProductDetails() {
+function ProductDetails({productId}) {
+    const {id}=useParams();
+    const dispatch = useDispatch();
+    const {selectedProduct,loading, error,similarProducts}=useSelector((state)=>state.products);
+    const {userId, guestId} = useSelector((state)=>state.auth);
     const [mainImg, setMainImg] = useState(null);
     const [selectedSize, setSelectedSize] = useState("");
     const [selectedColor, setSelectedColor] = useState("");
     const [quantity, setQuantity] = useState(1);
     const [isButtonDisable, setIsButtonDisable] = useState(false);
+
+    const productFetchId = productId || id;
+
+    useEffect(()=>{
+        if(productFetchId){
+            dispatch(fetchProductDetails(productFetchId));
+            dispatch(fetchSimilarProducts({id:productFetchId}));
+        }
+    },[dispatch,productFetchId]);
 
     useEffect(() => {
         if (selectedProduct?.images?.length > 0) {
@@ -111,22 +53,34 @@ function ProductDetails() {
         }
 
         setIsButtonDisable(true);
-        setTimeout(() => {
-            toast.success("Product added to cart!", { duration: 2000 });
-            setIsButtonDisable(false);
-            // Here you would typically add the product to a global state (e.g., Redux, Context API) or send it to an API
-            console.log({
-                product: selectedProduct.name,
-                size: selectedSize,
-                color: selectedColor,
-                quantity: quantity,
-                price: selectedProduct.price * quantity
+        
+        dispatch(addToCart({
+            productId:productFetchId,
+            quantity,
+            size:selectedSize,
+            color:selectedColor,
+            guestId,
+            userId:user?._id,
+        }))
+        .then(()=>{
+            toast.success("product added to cart",{
+                duration:1000,
             });
-        }, 500);
+        })
+        .finally(()=> {
+            setIsButtonDisable(false);
+        })
+        if(loading){
+            return <p>loading...</p>
+        }
+        if(error){
+            return <p>error:{error}</p>
+        }
     };
 
     return (
         <div className="container mx-auto p-4 md:p-8">
+            {selectedProduct &&(
             <div className="flex flex-col lg:flex-row gap-8">
                 {/* Left Side: Image Gallery */}
                 <div className="lg:w-1/2 flex flex-col-reverse md:flex-row gap-4">
@@ -255,8 +209,9 @@ function ProductDetails() {
                     <h2 className="text-2xl text-center font-medium mb-4">
                         You may also like
                     </h2>
-                    <ProductGrid products={similarProducts} />
+                    <ProductGrid products={similarProducts} loading={loading} error={error}/>
                 </div>
+            )}
         </div>
     );
 }

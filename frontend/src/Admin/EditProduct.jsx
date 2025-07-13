@@ -1,6 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
+import { fetchProductDetails, updateProduct } from '../redux/slices/productsSlice';
 
 function EditProduct() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const {id} = useParams();
+  const {selectedProduct,loading,error}=useSelector((state)=>state.products);
+
+
   const [productData, setProductData]=useState({
     name:"",
     description:"",
@@ -14,27 +22,60 @@ function EditProduct() {
     collections:"",
     material:"",
     gender:"",
-    images:[
-      {
-        url:"https://picsum.photos/150?random=1",
-      },
-      {
-        url:"https://picsum.photos/150?random=2",
-      },
-    ],
+    images:[],
   });
+
+  const [uploading,setUploading] = useState(false);
+
+  useEffect(()=>{
+    if(id){
+      dispatch(fetchProductDetails(id));
+    }
+  },[dispatch,id]);
+
+  useEffect(()=>{
+    if(selectedProduct){
+      setProductData(selectedProduct);
+    }
+  },[selectedProduct]);
+
   const handleChange=(e)=>{
     const {name,value}=e.target;
     setProductData((prevData)=>({...prevData,[name]: value}));
   }
   const handleImageUpload = async(e)=>{
     const file = e.target.files[0];
-    console.log(file);
+    const formData = new FormData();
+    formData.append("image",file);
+
+
+    try {
+      setUploading(true);
+      const {data}=await axios.post(
+        `${import.meta.env.VITE_BACKEND_URL}/api/upload`,
+        formData,
+        {
+          headers:{"content-type":"multipart/form-data"},
+        }
+      );
+      setProductData((prevData)=>({
+        ...prevData,
+        images:[...prevData.images,{url:data.imageUrl,altText:""}],
+      }));
+    } catch (error) {
+      console.log(error);
+      setUploading(false);
+    }
   }
+
   const handleSubmit =(e)=>{
     e.preventDefault();
-    console.log(productData);
+    dispatch(updateProduct({id,productData}));
+    navigate("/admin/products");
   }
+
+  if(loading) return <p>Loading...</p>
+  if(error) return <p>error:{error}</p>
   return (
     <div className="max-w-5xl mx-auto p-6 shadow-md rounded-md">
       <h2 className="text-3xl font-bold mb-6">Edit Product</h2>
@@ -90,6 +131,7 @@ function EditProduct() {
         <div className="mb-6">
           <label className="block font-semibold mb-2">upload image</label>
           <input type="file" onChange={handleImageUpload} />
+          {uploading&&<p>Uploading image...</p>}
           <div className="flex gap-4 mt-4">
             {productData.images.map((image, index)=>(
               <div key={index}>

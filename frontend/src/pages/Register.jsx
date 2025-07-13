@@ -1,22 +1,45 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // Assuming 'Link' is from react-router-dom or a similar library for navigation
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 // The user's original image import. Note: In the Canvas environment,
 // relative paths like '../assets/bg0.jpg' will not resolve.
 // For demonstration, a placeholder image URL is used below.
 import bgImg0 from '../assets/bg0.jpg';
+import { registerUser } from '../redux/slices/authSlice';
+import { useDispatch, useSelector } from "react-redux";
+import { mergeCart } from '../redux/slices/cartSlice';
 
 function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const {user,guestId, loading}=useSelector((state)=>state.auth);
+    const {cart} = useSelector((state)=>state.cart);
+
+    //get redirect parameter and check if it-s checkout or someting
+    const redirect = new URLSearchParams(location.search).get("redirect")||"/";
+    const isCheckoutRedirect = redirect.includes("checkout");
+
+    useEffect(()=>{
+        if(user){
+            if(cart?.products.length>0&&guestId){
+                dispatch(mergeCart({guestId,user})).then(()=>{
+                    navigate(isCheckoutRedirect?"/checkout":"/");
+                });
+            }else{
+                navigate(isCheckoutRedirect?"/checkout":"/")
+            }
+        }
+    },[user,guestId,cart,navigate,isCheckoutRedirect,dispatch]);
+
 
     // Function to handle form submission
     const handleSubmit = (e) => {
         e.preventDefault(); // Prevent default form submission behavior
-        console.log("Email:", email);
-        console.log("Password:", password);
-        console.log("name:", name);
+        dispatch(registerUser({name,email,password}));
         // Implement your login logic here (e.g., API call)
     };
 
@@ -84,14 +107,14 @@ function Register() {
                             type="submit"
                             className="bg-gray-900 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline transition duration-300 ease-in-out transform hover:scale-105 w-full"
                         >
-                            Sign up
+                            { loading? "loading" : "Sign up"}
                         </button>
                     </div>
 
                     {/* Register link */}
                     <p className="text-center text-gray-600 text-sm">
                         already have an account ?{' '}
-                        <Link to="/Login" className="text-gray-800 hover:underline font-semibold">
+                        <Link to={`/login?redirect=${encodeURIComponent(redirect)}`} className="text-gray-800 hover:underline font-semibold">
                             login
                         </Link>
                     </p>

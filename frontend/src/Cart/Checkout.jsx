@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import PayPalButton from './PayPalButton';
 // bgImg0 is not used in the JSX, so it can be removed if not needed elsewhere.
@@ -6,36 +7,17 @@ import PayPalButton from './PayPalButton';
 // useNavigate is not used in the JSX, so it can be removed if not needed elsewhere.
 // import { useNavigate } from 'react-router-dom';
 
-const cart={
-    products:[
-        {
-            name:"stylish jacket",
-            size:"M",
-            color:"Black",
-            price:120,
-            image: "https://placehold.co/100x100/E0E0E0/333333?text=Jacket", // Placeholder image
-        },
-        {
-            name:"sara sara",
-            size:"M",
-            color:"sara",
-            price:120,
-            image: "https://placehold.co/100x100/E0E0E0/333333?text=Item2", // Placeholder image
-        },
-        {
-            name:"elkhadri elkhadri",
-            size:"M",
-            color:"elkhadri",
-            price:120,
-            image: "https://placehold.co/100x100/E0E0E0/333333?text=Item3", // Placeholder image
-        },
-    ],
-    totalPrice:195,
-}
+
+
 
 function Checkout() {
     const [CheckoutId, setCheckoutId]=useState(null);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const {cart, loading,error}=useSelector((state)=>state.cart);
+    const {user}=useSelector((state)=>state.auth);
+
+
     // const navigate = useNavigate(); // Not used, so commented out
     const [shippingAddess, setshippingAddess]= useState({
         firstName:"",
@@ -47,19 +29,65 @@ function Checkout() {
         phone:"", // Corrected typo from 'phonenumber'
     });
 
-    const handlePaymentSuccess = (details)=>{
-        console.log("payment success ", details);
-        navigate("/order-confirmation");
+    //ensure cart is loaded before processing
+    useEffect(()=>{
+        if(!cart||!cart.products||cart.products.length===0){
+            navigate("/");
+        }
+    },[cart,navigate]);
+
+    const handleCreateCheckout=async(e)=>{
+        e.preventDefault();
+        if(cart && cart.products.length>0){
+            const res=await dispatch(
+                createCheckout({
+                    checkoutItems:cart.products,
+                    shippingAddess,
+                    paymentMethod:"Paypal",
+                    totalPrice:cart.totalPrice,
+                })
+            );
+            if(res.payload && res.payload._id){
+                setCheckoutId(res.payload._id);//set checkout id if chekcout successfully
+            }
+        }
     }
 
-    const handleCreateCheckout =(e)=>{
-        e.preventDefault();
-        setCheckoutId(3);
-        // In a real application, you would typically send shippingAddess and cart data to a backend
-        // and handle the payment initiation (e.g., PayPal redirect) here.
-        console.log("Shipping Address:", shippingAddess);
-        console.log("Cart:", cart);
+    const handlePaymentSuccess = async (details)=>{
+        try {
+            const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/pay`,
+                {paymentStatus:"paid",paymentDetails:details},
+                {
+                    headers:{
+                        Authorization:`Bearer ${localStorage.getItem("userToken")}`,
+                    },
+                }
+            );
+                await handleFinalizeCheckout(CheckoutId);
+        } catch (error) {
+            console.error(error);
+        }
     }
+
+    const handleFinalizeCheckout = async(CheckoutId)=>{
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/checkout/${checkoutId}/finalize`,
+                {},
+                {
+                    headers:{
+                        Authorization:`Bearer ${localStorage.getItem("userToken")}`
+                    }
+                }
+            );
+                navigate("/order-confirmation");
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    if(loading)return <p>loading cart...</p>;
+    if(error)return <p>error:{error}</p>;
+    if(!cart || !cart.products || cart.products.length===0)return <p>your cart is empty</p>;
+
 
   return (
     // Main container for the checkout page, ensuring full height and centering content
@@ -75,7 +103,7 @@ function Checkout() {
                         id="email"
                         type="email" 
                         disabled 
-                        value="user@exemple.com" 
+                        value={user?user.email:""}
                         className="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-3 bg-gray-100 cursor-not-allowed text-gray-600 focus:ring-indigo-500 focus:border-indigo-500 sm:text-base" 
                     />
                 </div>
@@ -179,7 +207,7 @@ function Checkout() {
                         <div className="text-center">
                             <h3 className="text-2xl font-semibold text-gray-800 mb-4">Pay with PayPal</h3>
                             {/* Placeholder for PayPal integration */}
-                            <PayPalButton amount={100} onSuccess={handlePaymentSuccess} 
+                            <PayPalButton amount={cart.totalPrice} onSuccess={handlePaymentSuccess} 
                             onError={(err)=>alert("payment failled try again ", err)}/>
                         </div>
                     )}

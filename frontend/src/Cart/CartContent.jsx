@@ -1,65 +1,31 @@
 import { useState } from 'react';
 import { IoMdTrash } from 'react-icons/io';
+import{useDispatch} from"react-redux";
+import { removeFromCart, updateCartItemQuantity } from '../redux/slices/cartSlice';
+
 
 // Dummy data for cart products
-const initialCartProducts = [
-  {
-    id: 1,
-    name: 'Stylish T-Shirt',
-    img: null, // Orange background, white text
-    size: 'M',
-    quantity: 1,
-    price: 25.99,
-  },
-  {
-    id: 2,
-    name: 'Comfortable Jeans',
-    img: null, // Black background, white text
-    size: 'L',
-    quantity: 2,
-    price: 49.99,
-  },
-  {
-    id: 3,
-    name: 'Sporty Sneakers',
-    img: null, // Red background, white text
-    size: '10',
-    quantity: 1,
-    price: 79.95,
-  },{
-    id: 4,
-    name: 'Sporty Sneakers',
-    img: null, // Red background, white text
-    size: '10',
-    quantity: 1,
-    price: 79.95,
-  },
-];
 
-function CartContent() {
-  const [cartProducts, setCartProducts] = useState(initialCartProducts);
+function CartContent({cart,userId, guestId}) {
+  const dispatch = useDispatch();
 
-  // Function to handle quantity decrement
-  const handleDecrement = (productId) => {
-    setCartProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === productId
-          ? { ...product, quantity: Math.max(1, product.quantity - 1) }
-          : product
-      )
-    );
-  };
+  //handle adding or substracting to cart
+  const handleAddToCart = (productId,delta,quantity,size,color)=>{
+    const newQuantity = quantity+delta;
+    if(newQuantity>=1){
+      dispatch(updateCartItemQuantity({
+        productId,
+        quantity:newQuantity,
+        guestId,
+        userId,
+        size,
+        color
+      }))
+    }
+  }
 
-  // Function to handle quantity increment
-  const handleIncrement = (productId) => {
-    setCartProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === productId
-          ? { ...product, quantity: product.quantity + 1 }
-          : product
-      )
-    );
-  };
+
+  
 
   // Function to handle item removal
   const handleRemoveItem = (productId) => {
@@ -68,9 +34,13 @@ function CartContent() {
     );
   };
 
+  const handleRemoveFromCart=(productId,size,color)=>{
+    dispatch(removeFromCart({productId,guestId,userId,size,color}));
+  }
+
   return (
     <div className="max-h-150 overflow-y-auto space-y-4">
-      {initialCartProducts.map((product) => (
+      {cart.products.map((product) => (
         <div
           key={product.id}
           className="flex flex-col sm:flex-row items-center p-3 border rounded-md shadow-sm w-full"
@@ -95,15 +65,25 @@ function CartContent() {
 
             {/* Quantity */}
             <div className="flex text-xs items-center space-x-2 ">
-              <button
-                onClick={() => handleDecrement(product.id)}
+              <button 
+                onClick={() => handleAddToCart(product.productId,
+                  -1,
+                  product.quantity,
+                  product.size,
+                  product.color,
+                )}
                 className="px-2 py-1 border text-xs rounded-full text-black"
               >
                 -
               </button>
               <span className="w-4 text-center text-black font-semibold">{product.quantity}</span>
               <button
-                onClick={() => handleIncrement(product.id)}
+                onClick={() => handleAddToCart(product.productId,
+                  1,
+                  product.quantity,
+                  product.size,
+                  product.color,
+                )}
                 className="px-2 py-1 border rounded-full text-black"
               >
                 +
@@ -114,7 +94,10 @@ function CartContent() {
             <div className="text-black flex text-xs flex-col items-center sm:items-end">
               <p className="font-bold">${product.price.toFixed(2)}</p>
               <button
-                onClick={() => handleRemoveItem(product.id)}
+                onClick={() => handleRemoveFromCart(product.productId,
+                  product.size,
+                  product.color,
+                )}
                 className="px-3 py-1 rounded-full border text-black"
               >
                 <IoMdTrash/>

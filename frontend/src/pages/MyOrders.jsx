@@ -2,52 +2,22 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function MyOrders() {
-  const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {orders,loading,error}=useSelector((state)=>state.orders);
 
-  useEffect(() => {
-    // Simulate fetching orders from an API
-    setTimeout(() => {
-      const mockOrders = [
-        {
-          _id: "12345", // Changed _id to be unique for better keying
-          createAt: new Date(),
-          shippingAddress: { city: "New York", country: "USA" },
-          orderItems: [
-            { name: "Product A", image: "https://placehold.co/50x50/E0F2F7/000000?text=ProdA" },
-          ],
-          totalPrice: 100.00,
-          isPaid: true,
-        },
-        {
-          _id: "67890", // Changed _id to be unique
-          createAt: new Date(Date.now() - 86400000 * 2), // 2 days ago
-          shippingAddress: { city: "Los Angeles", country: "USA" },
-          orderItems: [
-            { name: "Product B", image: "https://placehold.co/50x50/FFF3E0/000000?text=ProdB" },
-            { name: "Product C", image: "https://placehold.co/50x50/E8F5E9/000000?text=ProdC" },
-          ],
-          totalPrice: 250.50,
-          isPaid: false,
-        },
-        {
-          _id: "11223", // Changed _id to be unique
-          createAt: new Date(Date.now() - 86400000 * 5), // 5 days ago
-          shippingAddress: { city: "Chicago", country: "USA" },
-          orderItems: [
-            { name: "Product D", image: "https://placehold.co/50x50/FBE9E7/000000?text=ProdD" },
-          ],
-          totalPrice: 75.00,
-          isPaid: true,
-        },
-      ];
-      setOrders(mockOrders);
-    }, 1000); // Simulate network delay
-  }, []);
+  useEffect(()=>{
+    dispatch(fetchUserOrders());
+  },[dispatch])
+
+
 
   const handleRowClick = (orderId)=>{
     navigate(`/orders/${orderId}`);
-  }
+  };
+
+  if(loading)return <p>loading...</p>;
+  if(error)return <p>Error:{error}</p>;
 
   return (
     // Main container div with responsive padding and max width

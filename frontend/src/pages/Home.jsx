@@ -9,61 +9,38 @@ import bgImg1 from '../assets/bg1.jpg';
 import bgImg2 from '../assets/bg2.jpg';
 import bgImg3 from '../assets/bg3.jpg';
 import FeaturedCollection from '../Products/FeaturedCollection';
+import {useDispatch, useSelector} from "react-redux";
+import { useEffect } from 'react';
+import { fetchProductsByFilters } from '../redux/slices/productsSlice';
 
-
-
-const placeholderProducts = [
-      {
-          _id:1,
-          name:"product 1",
-          price:100,
-          images:[{url: bgImg1}],
-      },
-      {
-          _id:2,
-          name:"product 2",
-          price:200,
-          images:[{url: bgImg2}],
-      },
-      {
-          _id:3,
-          name:"product 3",
-          price:300,
-          images:[{url: bgImg3}],
-      },
-      {
-          _id:4,
-          name:"product 4",
-          price:400,
-          images:[{url: bgImg1}],
-      },
-          {
-              _id:5,
-              name:"product 5",
-              price:500,
-              images:[{url: bgImg1}],
-          },
-          {
-              _id:2,
-              name:"product 2",
-              price:200,
-              images:[{url: bgImg2}],
-          },
-          {
-              _id:3,
-              name:"product 3",
-              price:300,
-              images:[{url: bgImg3}],
-          },
-          {
-              _id:4,
-              name:"product 4",
-              price:400,
-              images:[{url: bgImg0}],
-          },
-]
 
 function Home() {
+  const dispatch = useDispatch();
+  const {products,loading,error} = useSelector((state)=>state.products);
+  const [bestSellerProduct,setBestSellerProduct]=useState(null);
+
+  useEffect(()=>{
+    //fetch products for a specific collection
+    dispatch(fetchProductsByFilters({
+      gender:"Women",
+      category:"bottom wear",
+      limit:8,
+    })
+  );
+  //fetch best seller product
+  const fetchBestSeller= async()=>{
+    try {
+      const response = await axios.gte(
+        `${import.meta.env.VITE_BACKEND_URL}/api/products/best-seller`
+      );
+      setBestSellerProduct(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  fetchBestSeller();
+  },[dispatch]);
+
   return (
     <>
       <Hero/>
@@ -72,13 +49,16 @@ function Home() {
       <h2 className="text-3xl text-center font-bold mb-4">
         Best Seller
       </h2>
-      <ProductDetails/>
+      {bestSellerProduct?(<ProductDetails productId={bestSellerProduct._id}/>):(
+        <p className="text-center">loading best seller products...</p>
+      )}
+      
       <Toaster />
       <div className="container mx-auto">
         <h2 className="text-3xl text-center font-bold mb-4">
           top wears for women
         </h2>
-        <ProductGrid products={placeholderProducts} />
+        <ProductGrid products={products} loading={loading} error={error} />
       </div>
       <FeaturedCollection/>
     </>

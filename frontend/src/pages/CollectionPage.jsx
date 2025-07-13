@@ -3,6 +3,8 @@ import FilterSidebar from "../Products/FilterSidebar"; // Assuming these compone
 import SortOptions from "../Products/SortOptions"; // Assuming these components exist
 import ProductGrid from "../Products/ProductGrid"; // Assuming these components exist
 import { FaFilter } from "react-icons/fa"; // Assuming you have react-icons installed
+import { useParams, useSearchParams } from "react-router-dom";
+import { fetchProductsByFilters } from "../redux/slices/productsSlice";
 
 // Placeholder images for demonstration. In a real app, import your actual images.
 const bgImg0 = "https://via.placeholder.com/150/FF0000/FFFFFF?text=Product0";
@@ -11,65 +13,19 @@ const bgImg2 = "https://via.placeholder.com/150/00FF00/FFFFFF?text=Product2";
 const bgImg3 = "https://via.placeholder.com/150/FFFF00/000000?text=Product3";
 
 function CollectionPage() {
-  const [products, setProducts] = useState([]);
+
+  const {collection}=useParams();
+  const {searchParams}=useSearchParams();
+  const dispatch = useDispatch();
+  const {products,loading,error}=useSelector((state)=>state.products);
+  const queryParams = Object.fromEntries([...searchParams]);
+
   const sidebarRef = useRef(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  useEffect(()=>{
+    dispatch(fetchProductsByFilters({collection,...queryParams}));
+  },[dispatch,collection,searchParams]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      const fetchedProduct = [
-        {
-          _id: 1,
-          name: "Product 1",
-          price: 100,
-          images: [{ url: bgImg1 }],
-        },
-        {
-          _id: 2,
-          name: "Product 2",
-          price: 200,
-          images: [{ url: bgImg2 }],
-        },
-        {
-          _id: 3,
-          name: "Product 3",
-          price: 300,
-          images: [{ url: bgImg3 }],
-        },
-        {
-          _id: 4,
-          name: "Product 4",
-          price: 400,
-          images: [{ url: bgImg1 }],
-        },
-        {
-          _id: 5,
-          name: "Product 5",
-          price: 500,
-          images: [{ url: bgImg1 }],
-        },
-        {
-          _id: 6, // Changed _id to be unique
-          name: "Product 6",
-          price: 200,
-          images: [{ url: bgImg2 }],
-        },
-        {
-          _id: 7, // Changed _id to be unique
-          name: "Product 7",
-          price: 300,
-          images: [{ url: bgImg3 }],
-        },
-        {
-          _id: 8, // Changed _id to be unique
-          name: "Product 8",
-          price: 400,
-          images: [{ url: bgImg0 }],
-        },
-      ];
-      setProducts(fetchedProduct);
-    }, 1000);
-  }, []);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -119,7 +75,7 @@ function CollectionPage() {
           <SortOptions />
         </div>
         <div>
-          <ProductGrid products={products} />
+          <ProductGrid products={products} loading={loading} error={error} />
         </div>
       </div>
     </div>
