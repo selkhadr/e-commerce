@@ -25,6 +25,7 @@ router.post("/register", async(req,res)=>{
         //sign and return the token along with user data
         jwt.sign(payload, process.env.JWT_SECRET_KEY,{expiresIn:"40h"},(err,token)=>{
             if(err) throw err;
+            //send the user and token in response
             res.status(201).json({
                 user:{
                     _id:user._id,
@@ -34,7 +35,6 @@ router.post("/register", async(req,res)=>{
                 },
                 token
             });
-            //send the user and token in response
         });
 
     }catch(err){
@@ -60,7 +60,9 @@ router.post("/login", async(req,res)=>{
         const payload = {user:{
             id: user._id,role:user.role
         }};
+
         //sign and return the token along with user data
+            //send the user and token in response
         jwt.sign(payload, process.env.JWT_SECRET_KEY,{expiresIn:"40h"},(err,token)=>{
             if(err) throw err;
             res.json({
@@ -72,7 +74,6 @@ router.post("/login", async(req,res)=>{
                 },
                 token
             });
-            //send the user and token in response
         });
     }catch(err){
         console.log(err);

@@ -16,3 +16,4 @@ router.get("/", protect,admin,async(req,res)=>{
         res.status(500).json({message:"server error"});
     }
 })
+module.exports=router;

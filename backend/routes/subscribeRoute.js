@@ -21,7 +21,7 @@ router.post("/subscribe", async(req,res)=>{
 
 
         //cretae a new subscriber
-        Subscriber = new Subscriber({email});
+        subscriber = new Subscriber({email});
         await subscriber.save();
 
         res

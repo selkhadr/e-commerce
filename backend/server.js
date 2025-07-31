@@ -2,16 +2,16 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
-const userRoutes = require("./routes/userRoutes");
-const productRoutes = require("./routes/productRoutes");
+const userRoutes = require("./routes/userRoute");
+const productRoutes = require("./routes/productRoute");
 const cartRoutes = require("./routes/cartRoutes");
-const checkoutRoutes = require("./routes/checkoutRoutes");
-const orderRoutes = require("./routes/orderRoutes");
-const uploadRoutes = require("./routes/uploadRoutes");
-const subscribeRoutes = require("./routes/subscribeRoutes");
-const adminRoutes = require("./routes/adminRoutes");
-const productAdminRoutes = require("./routes/productAdminRoutes");
-const adminOrderRoutes = require("./routes/adminOrderRoutes");
+const checkoutRoutes = require("./routes/checkoutRoute");
+const orderRoutes = require("./routes/orderRoute");
+const uploadRoutes = require("./routes/uploadRoute");
+const subscribeRoute = require("./routes/subscribeRoute");
+const adminRoute = require("./routes/adminRoute");
+const productAdminRoute = require("./routes/productAdminRoute");
+const adminOrderRoutes   = require("./routes/adminOrderRoutes");
 
 const app = express();
 app.use(express.json());
@@ -34,16 +34,16 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/checkout", checkoutRoutes);
 app.use("/api/order", orderRoutes);
 app.use("/api/upload", uploadRoutes);
-app.use("/api/subscribe", subscribeRoutes);
+app.use("/api/subscribe", subscribeRoute);
 
 
 //admin
-app.use("/api/admin/users", adminRoutes);
-app.use("/api/admin/products", productAdminRoutes);
+app.use("/api/admin/users", adminRoute);
+app.use("/api/admin/products", productAdminRoute);
 app.use("/api/admin/orders", adminOrderRoutes);
 
 
 
 app.listen(Port, ()=>{
-    console.log("nnnnnnn");
+    console.log(`port: ${Port}`);
 })

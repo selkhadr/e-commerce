@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import PayPalButton from './PayPalButton';
+import { createCheckout } from '../redux/actions/checkoutActions'; // Adjust the path as needed
 // bgImg0 is not used in the JSX, so it can be removed if not needed elsewhere.
 // import bgImg0 from '../assets/bg0.jpg'; 
 // useNavigate is not used in the JSX, so it can be removed if not needed elsewhere.
@@ -24,7 +25,7 @@ function Checkout() {
         lastName:"",
         address:"",
         city:"",
-        postalcode:"",
+        postalCode:"",
         country:"", // Corrected typo from 'contry'
         phone:"", // Corrected typo from 'phonenumber'
     });
@@ -40,9 +41,9 @@ function Checkout() {
         e.preventDefault();
         if(cart && cart.products.length>0){
             const res=await dispatch(
-                createCheckout({
+                await createCheckout({
                     checkoutItems:cart.products,
-                    shippingAddess,
+                    shippingAddress,
                     paymentMethod:"Paypal",
                     totalPrice:cart.totalPrice,
                 })

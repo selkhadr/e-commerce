@@ -8,6 +8,7 @@ import toast from 'react-hot-toast'; // Assuming you are using react-hot-toast f
 import { useParams } from 'react-router-dom';
 import { fetchProductDetails, fetchSimilarProducts } from '../redux/slices/productsSlice';
 import { addToCart } from '../redux/slices/cartSlice';
+import { useDispatch } from 'react-redux';
 
 
 
@@ -15,7 +16,7 @@ function ProductDetails({productId}) {
     const {id}=useParams();
     const dispatch = useDispatch();
     const {selectedProduct,loading, error,similarProducts}=useSelector((state)=>state.products);
-    const {userId, guestId} = useSelector((state)=>state.auth);
+    const {user, guestId} = useSelector((state)=>state.auth);
     const [mainImg, setMainImg] = useState(null);
     const [selectedSize, setSelectedSize] = useState("");
     const [selectedColor, setSelectedColor] = useState("");

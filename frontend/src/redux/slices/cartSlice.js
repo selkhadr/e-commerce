@@ -17,7 +17,7 @@ export const fetchCart = createAsyncThunk(
     "cart/fetchCart",
     async({userId, guestId},{rejectWithValue})=>{
         try{
-            const response = await axios.get(`${import.meta.VITR_BACKEND_URL}/api/cart`,
+            const response = await axios.get(`${import.meta.VITE_BACKEND_URL}/api/cart`,
                 {
                     params:{userId,guestId},
                 }
@@ -35,7 +35,7 @@ export const addToCart = createAsyncThunk("cart/addToCart", async({
     productId,quantity,size,color,guestId,userId}
 , {rejectWithValue})=>{
     try {
-        const response = await axios.post(`${import.meta.VITR_BACKEND_URL}/api/cart`,
+        const response = await axios.post(`${import.meta.VITE_BACKEND_URL}/api/cart`,
             {
                 productId,
                 quantity,
@@ -57,7 +57,7 @@ export const updateCartItemQuantity = createAsyncThunk(
         userId,size,color
     }, {rejectWithValue})=>{
         try {
-            const response = await axios.put(`${import.meta.env.VITR_BACKEND_URL}/api/cart`,
+            const response = await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/cart`,
                 {
                     productId,
                     quantity,
@@ -81,7 +81,7 @@ export const removeFromCart = createAsyncThunk(
         userId,size,color
     }, {rejectWithValue})=>{
         try {
-            const response = await axios({method:"Delete",url:`${import.meta.env.VITR_BACKEND_URL}/api/cart`,
+            const response = await axios({method:"DELETE",url:`${import.meta.env.VITE_BACKEND_URL}/api/cart`,
                 data:
                 {
                     productId,
@@ -103,7 +103,7 @@ export const removeFromCart = createAsyncThunk(
 export const mergeCart = createAsyncThunk(
     "cart/mergeCart",async({guestId,user}, {rejectWithValue})=>{
         try {
-            const response = await axios.post(`${import.meta.env.VITR_BACKEND_URL}/api/cart`,
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/cart/merge`,
                 {guestId,user},
                 {headers:{
                     Authorization:`Bearer ${localStorage.getItem("useToken")}`,
@@ -140,7 +140,7 @@ const cartSlice = createSlice({
             state.cart = action.payload;
             saveCartToStorage(action.payload);
         })
-        .addCase(fetchCart.reject,(state,action)=>{
+        .addCase(fetchCart.rejected,(state,action)=>{
             state.loading=false;
             state.error = action.error.message || "failed to fetch cart";
         })
@@ -153,9 +153,9 @@ const cartSlice = createSlice({
             state.cart = action.payload;
             saveCartToStorage(action.payload);
         })
-        .addCase(addToCart.reject,(state,action)=>{
+        .addCase(addToCart.rejected,(state,action)=>{
             state.loading=false;
-            state.error = action.error.message || "failed to add cart";
+            state.error = action.payload?.message || "failed to add cart";
         })
         .addCase(updateCartItemQuantity.pending,(state)=>{
             state.loading = true;
@@ -166,7 +166,7 @@ const cartSlice = createSlice({
             state.cart = action.payload;
             saveCartToStorage(action.payload);
         })
-        .addCase(updateCartItemQuantity.reject,(state,action)=>{
+        .addCase(updateCartItemQuantity.rejected,(state,action)=>{
             state.loading=false;
             state.error = action.payload?.message || "failed to update item quantity";
         })
@@ -179,7 +179,7 @@ const cartSlice = createSlice({
             state.cart = action.payload;
             saveCartToStorage(action.payload);
         })
-        .addCase(removeFromCart.reject,(state,action)=>{
+        .addCase(removeFromCart.rejected,(state,action)=>{
             state.loading=false;
             state.error = action.payload?.message || "failed to remove item";
         })
@@ -192,12 +192,12 @@ const cartSlice = createSlice({
             state.cart = action.payload;
             saveCartToStorage(action.payload);
         })
-        .addCase(mergeCart.reject,(state,action)=>{
+        .addCase(mergeCart.rejected,(state,action)=>{
             state.loading=false;
             state.error = action.payload?.message || "failed to merge cary";
         })
     }
 })
 
-export const {clearCart} = cartSlice.action;
+export const {clearCart} = cartSlice.actions;
 export default cartSlice.reducer;

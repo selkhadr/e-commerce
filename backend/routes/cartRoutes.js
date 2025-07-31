@@ -75,7 +75,7 @@ router.post("/", async (req, res) => {
             quantity: productQuantity,
           },
         ],
-        totalPrice: productPrice * productQuantity, // Both are now numbers
+        totalPrice: product.price * productQuantity, // Both are now numbers
       });
       return res.status(201).json(newCart);
     }
@@ -177,7 +177,7 @@ router.get("/", async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json("server error");
+    res.status(500).json({message:"server error"});
   }
 });
 

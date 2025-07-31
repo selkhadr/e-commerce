@@ -1,4 +1,4 @@
-import {createSlice,createAsyncThunk} from "@redux/toolkit";
+import {createSlice,createAsyncThunk} from "@reduxjs/toolkit";
 import axios from "axios";
 
 //async thunk to fetch products by colllection and optional filters
@@ -54,7 +54,7 @@ export const updateProduct = createAsyncThunk(
                     Authorization:`Bearer ${localStorage.getItem("userToken")}`,
                 }
             }
-        )
+        );
         return response.data;
     }
 );

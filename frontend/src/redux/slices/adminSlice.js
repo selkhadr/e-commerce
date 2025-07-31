@@ -67,7 +67,7 @@ export const deleteUser = createAsyncThunk(
     }
 )
 
-const orderSlice = createSlice({
+const adminSlice = createSlice({
     name:"admin",
     initialState:{
         users:[],
@@ -77,26 +77,24 @@ const orderSlice = createSlice({
     reducers:{},
     extraReducers:(builder)=>{
         builder
-        //fetch users
         .addCase(fetchUsers.pending,(state)=>{
-            state.loading = true;
-            state.error=null;
+            state.loading =true
         })
         .addCase(fetchUsers.fulfilled,(state,action)=>{
-            state.loading = false;
-            state.orders=action.payload;
+            state.loading =false;
+            state.users=action.payload;
         })
-        .addCase(fetchUsers.rejected,(state,action)=>{
-            state.loading = false;
+        .addCase(fetchUsers.pending,(state,action)=>{
+            state.loading =false;
             state.error=action.error.message;
         })
-        //fetch order details
+        .addCase(updateUser.pending,(state)=>{
+            state.loading =true
+        })
         .addCase(updateUser.fulfilled,(state,action)=>{
             const updatedUser = action.payload;
-            const userIndex = state.users.findIndex(
-                (user)=>user._id===updateUser._id
-            );
-            if(userIndex !== -1){
+            const userIndex=state.users.findIndex((user)=>user._id===updatedUser._id);
+            if(userIndex!==-1){
                 state.users[userIndex]=updatedUser;
             }
         })
@@ -109,14 +107,14 @@ const orderSlice = createSlice({
         })
         .addCase(addUser.fulfilled,(state,action)=>{
             state.loading = false;
-            state.users.push(action.payload.user);//add a new user to the store
+            state.users.push(action.payload.user);
         })
         .addCase(addUser.rejected,(state,action)=>{
             state.loading = false;
-            state.error = action.payload.message;
+            state.error=action.payload.message;
         })
-        ;      
-    },
-});
+    }
+})
+
 
 export default adminSlice.reducer;

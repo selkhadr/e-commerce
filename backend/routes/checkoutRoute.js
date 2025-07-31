@@ -10,7 +10,7 @@ const router = express.Router();
 //post /api/checkout
 //create a new checkout session
 //private
-Router.post("/", protect,async(req,res)=> {
+router.post("/", protect,async(req,res)=> {
     const {checkoutItems, shippingAddress, paymentMethod,totalPrice} = req.body;
     if(!checkoutItems || checkoutItems.length === 0){
         return res.status(400).json({message:"no items in checkout"});

@@ -4,12 +4,12 @@ import axios from "axios";
 //fetch all orders(admin only)
 export const fetchAllOrders = createAsyncThunk(
     "adminOrders/fetchAllOrders",
-    async(_,{rejectWithVaue})=>{
+    async(_,{rejectWithValue})=>{
         try {
             const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/admin/orders`,
                 {
                     headers:{
-                        Authorization:`Beare ${localStorage.getItem}`
+                        Authorization:`Bearer ${localStorage.getItem}`
                     }
                 }
             );
@@ -25,13 +25,13 @@ export const fetchAllOrders = createAsyncThunk(
 //update order delivery status
 export const updateOrderStatus = createAsyncThunk(
     "adminOrders/updateOrderStatus",
-    async({id,status},{rejectWithVaue})=>{
+    async({id,status},{rejectWithValue})=>{
         try {
             const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/admin/orders/${id}`,
                 {status},
                 {
                     headers:{
-                        Authorization:`Beare ${localStorage.getItem("userToken")}`,
+                        Authorization:`Bearer ${localStorage.getItem("userToken")}`,
                     }
                 }
             );
@@ -45,12 +45,12 @@ export const updateOrderStatus = createAsyncThunk(
 //delete an order
 export const deleteOrder = createAsyncThunk(
     "adminOrders/deleteOrder",
-    async(id,{rejectWithVaue})=>{
+    async(id,{rejectWithValue})=>{
         try {
             await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/admin/orders/${id}`,
                 {
                     headers:{
-                        Authorization:`Beare ${localStorage.getItem("userToken")}`,
+                        Authorization:`Bearer ${localStorage.getItem("userToken")}`,
                     }
                 }
             );
@@ -98,7 +98,7 @@ const adminOrderSlice = createSlice({
         //update order status
         .addCase(updateOrderStatus.fulfilled, (state,action)=>{
             const updatedOrder = action.payload;
-            const orderIndex = state.order.findIndex(
+            const orderIndex = state.orders.findIndex(
                 (order)=>order._id===updatedOrder._id
             );
             if(orderIndex!==-1){

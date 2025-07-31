@@ -1,4 +1,4 @@
-import {PayPalButtons,PayPalScriptProvider} from "@paypal/react-paypal-js"
+ import {PayPalButtons,PayPalScriptProvider} from "@paypal/react-paypal-js"
 
 function PayPalButton({amount, onSuccess,onError}) {
   return (

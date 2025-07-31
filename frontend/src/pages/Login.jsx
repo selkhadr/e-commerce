@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 // Assuming 'Link' is from react-router-dom or a similar library for navigation
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 // The user's original image import. Note: In the Canvas environment,

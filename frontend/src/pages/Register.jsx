@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 // Assuming 'Link' is from react-router-dom or a similar library for navigation
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 // The user's original image import. Note: In the Canvas environment,
 // relative paths like '../assets/bg0.jpg' will not resolve.
 // For demonstration, a placeholder image URL is used below.
-import bgImg0 from '../assets/bg0.jpg';
 import { registerUser } from '../redux/slices/authSlice';
 import { useDispatch, useSelector } from "react-redux";
 import { mergeCart } from '../redux/slices/cartSlice';
@@ -111,7 +110,7 @@ function Register() {
                         </button>
                     </div>
 
-                    {/* Register link */}
+                    {/* Register link */}þ
                     <p className="text-center text-gray-600 text-sm">
                         already have an account ?{' '}
                         <Link to={`/login?redirect=${encodeURIComponent(redirect)}`} className="text-gray-800 hover:underline font-semibold">

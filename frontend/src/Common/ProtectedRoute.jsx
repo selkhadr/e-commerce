@@ -8,8 +8,8 @@ function ProtectedRoute({children,role})=> {
         return <Navigate to="/login" replace/>;
     }
   return (
-   children;
-  )
+   children
+  );
 }
 
 export default ProtectedRoute

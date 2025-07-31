@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { subscribe } = require("../routes/checkoutRoutes");
 
 const subscriberSchema = new mongoose.Schema({
     email:{

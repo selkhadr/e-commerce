@@ -10,8 +10,9 @@ import bgImg2 from '../assets/bg2.jpg';
 import bgImg3 from '../assets/bg3.jpg';
 import FeaturedCollection from '../Products/FeaturedCollection';
 import {useDispatch, useSelector} from "react-redux";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchProductsByFilters } from '../redux/slices/productsSlice';
+import axios from 'axios';
 
 
 function Home() {
@@ -30,7 +31,7 @@ function Home() {
   //fetch best seller product
   const fetchBestSeller= async()=>{
     try {
-      const response = await axios.gte(
+      const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/api/products/best-seller`
       );
       setBestSellerProduct(response.data);

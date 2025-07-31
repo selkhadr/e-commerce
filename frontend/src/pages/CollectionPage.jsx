@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import FilterSidebar from "../Products/FilterSidebar"; // Assuming these components exist
 import SortOptions from "../Products/SortOptions"; // Assuming these components exist
 import ProductGrid from "../Products/ProductGrid"; // Assuming these components exist
@@ -7,10 +8,6 @@ import { useParams, useSearchParams } from "react-router-dom";
 import { fetchProductsByFilters } from "../redux/slices/productsSlice";
 
 // Placeholder images for demonstration. In a real app, import your actual images.
-const bgImg0 = "https://via.placeholder.com/150/FF0000/FFFFFF?text=Product0";
-const bgImg1 = "https://via.placeholder.com/150/0000FF/FFFFFF?text=Product1";
-const bgImg2 = "https://via.placeholder.com/150/00FF00/FFFFFF?text=Product2";
-const bgImg3 = "https://via.placeholder.com/150/FFFF00/000000?text=Product3";
 
 function CollectionPage() {
 

@@ -102,8 +102,8 @@ router.put("/:id", protect, admin,async(req,res)=>{
       product.material=material||product.material;
       product.gender=gender||product.gender;
       product.images=images||product.images;
-      product.isFeatured=isFeatured||product.isFeatured;
-      product.isPublished=isPublished||product.isPublished;
+      product.isFeatured=isFeatured !== undefined?isFeatured :product.isFeatured;
+      product.isPublished=isPublished !== undefined?isPublished :product.isPublished;
       product.tags=tags||product.tags;
       product.dimensions=dimensions||product.dimensions;
       product.weight=weight||product.weight;
@@ -231,7 +231,6 @@ router.get("/best-seller", async(req,res)=>{
     res.status(500).send("Server Error");
   }
 })
-module.exports = router;
 
 //get /api/products/new-arrivals
 //retrieve lates 8 products - creation date
@@ -288,3 +287,4 @@ router.get("/similar/:id", async(req,res)=>{
   }
 })
 
+module.exports = router;

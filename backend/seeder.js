@@ -26,10 +26,12 @@ const seedData = async () => {
     });
     //assign the default user id to each product
     const userId = createdUser._id;
-    const sampleProducts = products.map((product) => ({
-      ...product,
-      user: userId,
-    }));
+    const sampleProducts = products.map((product) => {
+      return{
+        ...product,
+        user: userId,
+      };
+    });
     await Product.insertMany(sampleProducts);
     console.log("product data seeded successfully");
     process.exit();

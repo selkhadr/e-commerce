@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom';
 import { HiOutlineShoppingBag, HiOutlineUser, HiOutlineMenu } from "react-icons/hi";
 import { IoMdClose } from "react-icons/io"; 
@@ -37,13 +38,13 @@ const Navbar = () => {
             <Link to="/collections/all?gender=Men" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
               Men
             </Link>
-            <Link to="/collections/all?gender=Men" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
+            <Link to="/collections/all?gender=Women" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
               Women
             </Link>
             <Link to="/collections/all?category=Top Wear" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
               Top Wear
             </Link>
-            <Link to="/collections/all?category=bottom wear" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
+            <Link to="/collections/all?category=Bottom wear" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
               Bottom Wear
             </Link>
           </div>
@@ -104,28 +105,28 @@ const Navbar = () => {
               <h2>Menu</h2>
             </Link>
             <Link
-              to="#"
+              to="/collections/all?gender=Men"
               onClick={toggleNavDrawerOpen}
               className="block py-3 text-lg font-medium text-gray-800 hover:text-gray-900 border-b border-gray-200 transition-colors duration-300"
             >
               <h2>Men</h2>
             </Link>
             <Link
-              to="#"
+              to="/collections/all?gender=Women"
               onClick={toggleNavDrawerOpen}
               className="block py-3 text-lg font-medium text-gray-800 hover:text-gray-900 border-b border-gray-200 transition-colors duration-300"
             >
               <h2>Women</h2>
             </Link>
             <Link
-              to="#"
+              to="/collections/all?category=Top Wear"
               onClick={toggleNavDrawerOpen}
               className="block py-3 text-lg font-medium text-gray-800 hover:text-gray-900 border-b border-gray-200 transition-colors duration-300"
             >
               <h2>Top Wear</h2>
             </Link>
             <Link
-              to="#"
+              to="/collections/all?category=Bottom Wear"
               onClick={toggleNavDrawerOpen}
               className="block py-3 text-lg font-medium text-gray-800 hover:text-gray-900 transition-colors duration-300"
             >

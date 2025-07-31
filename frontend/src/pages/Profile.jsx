@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import MyOrders from "../pages/MyOrders"; // Assuming MyOrders is in a 'pages' directory relative to Profile
 import { useNavigate } from "react-router-dom";
 import { logout } from "../redux/slices/authSlice";

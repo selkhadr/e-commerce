@@ -1,6 +1,7 @@
 import { IoMdClose } from "react-icons/io";
 import CartContent from "../Cart/CartContent"
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom"
+import { useSelector } from "react-redux";
 
 function CartDrawer({ drawerOpen, toggleDrawerOpen }) {
   const navigate = useNavigate();
@@ -11,8 +12,9 @@ function CartDrawer({ drawerOpen, toggleDrawerOpen }) {
     toggleDrawerOpen();
     if(!user){
       navigate("/login?redirect=checkout");
+    }else{
+      navigate("/checkout");
     }
-    navigate("/checkout");
   };
   return (
     <div
