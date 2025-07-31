@@ -41,10 +41,10 @@ const Navbar = () => {
             <Link to="/collections/all?gender=Women" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
               Women
             </Link>
-            <Link to="/collections/all?category=Top Wear" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
+            <Link to="/collections/all?Category=Top Wear" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
               Top Wear
             </Link>
-            <Link to="/collections/all?category=Bottom wear" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
+            <Link to="/collections/all?Category=Bottom wear" className="text-gray-600 hover:text-gray-900 font-medium transition-colors duration-300">
               Bottom Wear
             </Link>
           </div>
@@ -119,14 +119,14 @@ const Navbar = () => {
               <h2>Women</h2>
             </Link>
             <Link
-              to="/collections/all?category=Top Wear"
+              to="/collections/all?Category=Top Wear"
               onClick={toggleNavDrawerOpen}
               className="block py-3 text-lg font-medium text-gray-800 hover:text-gray-900 border-b border-gray-200 transition-colors duration-300"
             >
               <h2>Top Wear</h2>
             </Link>
             <Link
-              to="/collections/all?category=Bottom Wear"
+              to="/collections/all?Category=Bottom Wear"
               onClick={toggleNavDrawerOpen}
               className="block py-3 text-lg font-medium text-gray-800 hover:text-gray-900 transition-colors duration-300"
             >

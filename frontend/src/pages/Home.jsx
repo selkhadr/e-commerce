@@ -3,12 +3,6 @@ import GenderCollectionSection from '../Products/GenderCollectionSection'
 import NewArrivals from '../Products/NewArrivals'
 import ProductDetails from '../Products/ProductDetails'
 import { Toaster } from 'react-hot-toast';
-import ProductGrid from '../Products/ProductGrid';
-import bgImg0 from '../assets/bg0.jpg';
-import bgImg1 from '../assets/bg1.jpg';
-import bgImg2 from '../assets/bg2.jpg';
-import bgImg3 from '../assets/bg3.jpg';
-import FeaturedCollection from '../Products/FeaturedCollection';
 import {useDispatch, useSelector} from "react-redux";
 import { useEffect, useState } from 'react';
 import { fetchProductsByFilters } from '../redux/slices/productsSlice';
@@ -55,13 +49,6 @@ function Home() {
       )}
       
       <Toaster />
-      <div className="container mx-auto">
-        <h2 className="text-3xl text-center font-bold mb-4">
-          top wears for women
-        </h2>
-        <ProductGrid products={products} loading={loading} error={error} />
-      </div>
-      <FeaturedCollection/>
     </>
   )
 }

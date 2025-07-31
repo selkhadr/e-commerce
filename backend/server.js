@@ -17,6 +17,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 dotenv.config();
+app.use('/images', express.static('public/images'));
 
 const Port = process.env.PORT||3000;
 
@@ -32,7 +33,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/checkout", checkoutRoutes);
-app.use("/api/order", orderRoutes);
+app.use("/api/orders", orderRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/subscribe", subscribeRoute);
 

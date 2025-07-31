@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import bgImg0 from '../assets/bg0.jpg';
+import bgImg0 from '../assets/hero_backgound.jpg';
 
 
 const Hero = () => {
@@ -16,7 +16,7 @@ const Hero = () => {
     <h2 className="text-4xl md:text-5xl  font-bold mb-4 rounded-md">Your Dream Vacation Awaits</h2>
     <p className="text-lg md:text-xl  mb-6 rounded-md">Explore our exclusive vacation packages and discover your next unforgettable adventure!</p>
     <Link
-      href="#"
+      to="collections/all"
       className="inline-block  bg-red-950 hover:bg-red-900 text-white font-semibold py-3 px-8 rounded-full transition duration-300 ease-in-out transform hover:scale-105 shadow-lg"
     >
       <p className=''>Explore Packages</p>

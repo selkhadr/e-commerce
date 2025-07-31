@@ -12,7 +12,7 @@ import { fetchProductsByFilters } from "../redux/slices/productsSlice";
 function CollectionPage() {
 
   const {collection}=useParams();
-  const {searchParams}=useSearchParams();
+  const [searchParams]=useSearchParams();
   const dispatch = useDispatch();
   const {products,loading,error}=useSelector((state)=>state.products);
   const queryParams = Object.fromEntries([...searchParams]);

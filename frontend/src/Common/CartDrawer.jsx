@@ -44,7 +44,7 @@ function CartDrawer({ drawerOpen, toggleDrawerOpen }) {
       <div className="p-4 border-t border-gray-200 flex flex-col space-y-3">
         <div className="flex justify-between items-center text-lg font-semibold">
           <p className="text-gray-700">Total:</p>
-          <p className="text-red-400">$0.00</p> {/* Placeholder for total */}
+          <p className="text-red-400">${cart.totalPrice}</p> {/* Placeholder for total */}
         </div>
         {cart && cart?.products?.length>0 && (
           <>

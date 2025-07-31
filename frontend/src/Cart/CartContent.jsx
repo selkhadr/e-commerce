@@ -26,13 +26,6 @@ function CartContent({cart,userId, guestId}) {
 
   
 
-  // Function to handle item removal
-  const handleRemoveItem = (productId) => {
-    setCartProducts((prevProducts) =>
-      prevProducts.filter((product) => product.id !== productId)
-    );
-  };
-
   const handleRemoveFromCart=(productId,size,color)=>{
     dispatch(removeFromCart({productId,guestId,userId,size,color}));
   }
@@ -41,7 +34,7 @@ function CartContent({cart,userId, guestId}) {
     <div className="max-h-150 overflow-y-auto space-y-4">
       {cart.products.map((product) => (
         <div
-          key={product.id}
+          key={`${product.productId}-${product.size}-${product.color}`}
           className="flex flex-col sm:flex-row items-center p-3 border rounded-md shadow-sm w-full"
         >
           {/* Image */}

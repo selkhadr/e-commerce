@@ -10,7 +10,7 @@ export const fetchUserOrders = createAsyncThunk(
                 `${import.meta.env.VITE_BACKEND_URL}/api/orders/my-orders`,
                 {
                     headers:{
-                        Authorization:`Bearer ${localStorage.getItem("userItem")}`,
+                        Authorization:`Bearer ${localStorage.getItem("userToken")}`,
                     }
                 }
             )
@@ -67,7 +67,7 @@ const orderSlice = createSlice({
         })
         .addCase(fetchUserOrders.rejected,(state,action)=>{
             state.loading = false;
-            state.error=action.payload.message;
+            state.error = action.payload?.message || action.error?.message || "Failed to fetch orders";
         })
         //fetch order details
         .addCase(fetchOrderDetails.pending,(state)=>{
@@ -80,7 +80,7 @@ const orderSlice = createSlice({
         })
         .addCase(fetchOrderDetails.rejected,(state,action)=>{
             state.loading = false;
-            state.error=action.payload.message;
+            state.error = action.payload?.message || action.error?.message || "Failed to fetch order details";
         });
             
     },
