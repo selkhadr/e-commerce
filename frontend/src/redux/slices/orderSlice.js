@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThnk}from "@reduxjs/toolkit";
+import {createSlice, createAsyncThunk}from "@reduxjs/toolkit";
 import axios from "axios";
 
 //async thunk to fetch user orders
